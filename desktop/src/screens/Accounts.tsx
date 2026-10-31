@@ -96,10 +96,10 @@ function ItemPanel(props: { id: string; onEdit: (d: ItemDetail) => void; onDelet
   };
   return (
     <div className="card col">
-      <div className="row"><h2 className="grow">{d.summary.title}</h2><button className="btn small" onClick={() => props.onEdit(d)}>{t("edit")}</button></div>
-      {d.summary.has_conflict && <div className="notice warn small">{t("exc_conflict_body")} {t("exc_conflict_next")}</div>}
+      <div className="row"><h2 className="grow">{d.title}</h2><button className="btn small" onClick={() => props.onEdit(d)}>{t("edit")}</button></div>
+      {d.has_conflict && <div className="notice warn small">{t("exc_conflict_body")} {t("exc_conflict_next")}</div>}
       <dl className="kv">
-        {d.summary.username && (<><dt>{t("fUsername")}</dt><dd className="row"><span className="grow">{d.summary.username}</span><button className="btn small" onClick={() => copy("username")}>{t("copy")}</button></dd></>)}
+        {d.username && (<><dt>{t("fUsername")}</dt><dd className="row"><span className="grow">{d.username}</span><button className="btn small" onClick={() => copy("username")}>{t("copy")}</button></dd></>)}
         {d.has_secret && (
           <>
             <dt>{t("fPassword")}</dt>
@@ -118,12 +118,12 @@ function ItemPanel(props: { id: string; onEdit: (d: ItemDetail) => void; onDelet
         {d.has_totp && (<><dt>{t("totpCode")}</dt><dd className="row"><span className="mono grow">{totp ? `${totp.code} · ${totp.remaining_seconds}s` : "…"}</span><button className="btn small" onClick={() => copy("totp_code")}>{t("copyTotp")}</button></dd></>)}
         {d.urls.length > 0 && (<><dt>{t("fUrls")}</dt><dd>{d.urls.map((u) => <div key={u} className="small">{u}</div>)}</dd></>)}
         {d.notes && (<><dt>{t("fNotes")}</dt><dd className="small" style={{ whiteSpace: "pre-wrap" }}>{d.notes}</dd></>)}
-        <dt>{t("status")}</dt><dd>{fmtTime(lang, d.summary.updated_at)}</dd>
+        <dt>{t("status")}</dt><dd>{fmtTime(lang, d.updated_at)}</dd>
       </dl>
       <ErrorText error={error} />
       <div className="row">
         <button className="btn danger small" onClick={async () => {
-          if (!window.confirm(t("deleteConfirm", { t: d.summary.title }))) return;
+          if (!window.confirm(t("deleteConfirm", { t: d.title }))) return;
           const r = await run(() => api.deleteItem(props.id));
           if (r !== undefined) props.onDeleted();
         }}>{t("delete")}</button>
@@ -164,8 +164,8 @@ function ItemEditor(props: { item: ItemDetail | null; projects: { project_id: st
   const { t } = useApp();
   const it = props.item;
   const [form, setForm] = useState<ItemForm>({
-    entry_id: it?.summary.entry_id, kind: it?.summary.kind ?? "login", title: it?.summary.title ?? "", username: it?.summary.username ?? "",
-    urls: it?.urls ?? [], notes: it?.notes ?? "", project_id: it?.summary.project_id, tags: it?.summary.tags ?? [],
+    entry_id: it?.entry_id, kind: it?.kind ?? "login", title: it?.title ?? "", username: it?.username ?? "",
+    urls: it?.urls ?? [], notes: it?.notes ?? "", project_id: it?.project_id, tags: it?.tags ?? [],
   });
   const [secret, setSecret] = useState("");
   const [genRef, setGenRef] = useState<Generated | null>(null);

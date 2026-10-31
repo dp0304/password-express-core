@@ -47,8 +47,9 @@ export interface ItemSummary {
   entry_id: string; kind: string; title: string; username?: string; primary_url?: string; project_id?: string;
   lifecycle: string; has_conflict: boolean; pending_sync: boolean; tags: string[]; updated_at: string;
 }
-export interface ItemDetail {
-  summary: ItemSummary; urls: string[]; notes?: string; has_secret: boolean; secret_masked?: string; has_totp: boolean;
+// Rust flattens ItemSummary into the get_item response with #[serde(flatten)].
+export interface ItemDetail extends ItemSummary {
+  urls: string[]; notes?: string; has_secret: boolean; secret_masked?: string; has_totp: boolean;
   fields: { name: string; value?: string; sensitive: boolean }[]; version?: number; conflict_versions: number[]; created_at: string;
 }
 export interface PasswordRules {
