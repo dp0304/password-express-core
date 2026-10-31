@@ -14,6 +14,36 @@
 参考 CLI、基础自托管服务，以及跨平台桌面 App（`desktop/`）。商业手机 App、浏览器扩展、
 官方云服务与控制台、团队功能和官方维护的集成不在本目录中，本目录也不应被称为“完整开源产品”。
 
+## 桌面 App 截图 / Desktop screenshots
+
+以下截图使用本次编译的桌面前端，连接真实的本地 Rust 核心，在浏览器中采集。
+账号库、账号与资源均为独立的虚构演示数据，密码保持隐藏。原生桌面 App 默认启用防截屏。
+采集环境与说明见 [`docs/screenshots/README.md`](docs/screenshots/README.md)。
+
+### 账号库 / Vault
+
+按项目管理登录账号、API Key、数据库凭据和安全备注，查看账号详情与掩码密码。
+
+![账号库：演示项目中的账号列表与隐藏密码的账号详情](docs/screenshots/02-vault.jpg)
+
+### AI 连接 / AI connections
+
+检测本机 AI 工具，展示标准协议接入方式与用户 / 项目配置范围。
+
+![AI 连接：Codex、Claude Code、Cursor 等工具的实际检测结果](docs/screenshots/03-ai-connections.jpg)
+
+### 执行设备 / Executors
+
+查看本机执行设备的运行状态、保护等级，以及登记的 HTTP API / PostgreSQL 演示资源。
+
+![执行设备：本机兼容连接与测试环境资源](docs/screenshots/04-executors.jpg)
+
+### 总览 / Overview
+
+汇总账号库、同步、本机执行设备状态和需要处理的提醒。
+
+![总览：账号库状态、本机执行设备与恢复材料提醒](docs/screenshots/01-overview.jpg)
+
 ## 包含什么
 
 | 目录 | 内容 |
@@ -60,7 +90,7 @@
 A full end-to-end run (temporary PostgreSQL, self-host node, CLI as the trusted device, MCP bridge):
 
 ```bash
-cd open-source
+# 在本仓库根目录运行 / run from this repository's root
 tests/e2e/run.sh            # 需要 Homebrew PostgreSQL 17 / needs PostgreSQL 17 binaries
 ```
 
@@ -68,6 +98,7 @@ tests/e2e/run.sh            # 需要 Homebrew PostgreSQL 17 / needs PostgreSQL 1
 
 ```bash
 cargo build -p aipass-node -p aipass-cli -p aipass-mcp
+export PATH="$PWD/target/debug:$PATH"
 aipass-node -c node.toml init --name my-node --data-dir ./node-data
 aipass-node -c node.toml run &                      # broker + executor + sync + relay + /mcp
 aipass vault init --device-name laptop              # 可信设备上的保管库 / vault on the trusted device
@@ -88,7 +119,7 @@ aipass grants revoke grt_… --level end_sessions
 需要 Rust（edition 2024；本仓库在 nightly 1.97 上开发与测试）。
 
 ```bash
-cd open-source
+# 在本仓库根目录运行
 cargo check --workspace
 cargo test -p aipass-crypto -p aipass-types -p aipass-storage
 # 重新生成测试向量（会覆盖 test-vectors/ 中由测试生成的文件）

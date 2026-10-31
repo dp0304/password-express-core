@@ -10,6 +10,14 @@ One cross-platform codebase (Tauri 2: Rust core + React/TypeScript UI) for macOS
 
 > 本产品尚未经过独立安全审计。 / This product has not yet been independently security audited.
 
+## 界面预览 / Screenshots
+
+使用独立演示账号库，密码保持隐藏；本次编译的前端连接真实 Rust 核心，在浏览器中采集。
+完整图集与采集说明见[仓库 README](../README.md#桌面-app-截图--desktop-screenshots)和[截图说明](../docs/screenshots/README.md)。
+The screenshots use the compiled frontend connected to the real Rust core with fictional data, captured in a browser.
+
+![账号库 / Vault](../docs/screenshots/02-vault.jpg)
+
 ## Purpose
 
 The desktop app is the user's trusted client on a computer:
@@ -75,7 +83,7 @@ AI tools and cannot resist same-user code, debugging or full takeover (§9.3) �
 
 ## Build / test / run
 
-Prerequisites: Rust (stable or nightly ≥ 1.90), Node 24 + pnpm 11. macOS: Xcode Command Line Tools.
+Prerequisites: Rust (edition 2024; tested with nightly-2026-04-29 / 1.97), Node 24 + pnpm. macOS: Xcode Command Line Tools.
 Linux: `webkit2gtk-4.1`, `libsoup-3.0`, `libayatana-appindicator3` (Tauri 2 prerequisites).
 Windows: WebView2 + MSVC build tools.
 
@@ -117,8 +125,9 @@ Environment: `AIPASS_HOME` (default `~/.aipass`), `AIPASS_CLOUD_URL`, `AIPASS_LO
 
 ### What was built and tested here (macOS arm64)
 
-- `pnpm typecheck`, `pnpm test` (12 vitest tests: §5.3 field order, narrowing never widens, storage
-  validation, grouping, exception detection, i18n completeness + honesty rules), `pnpm build`.
+- `pnpm typecheck`, `pnpm test` (13 vitest tests: §5.3 field order, narrowing never widens, storage
+  validation, grouping, exception detection, i18n completeness + honesty rules, flattened account-detail
+  rendering and edit/save regression), `pnpm build`.
 - `cargo test --workspace` in `src-tauri`: unit tests (framing, envelopes, IPC paths/tokens, secret store
   lock cycle, licence verification, manifest shape) and `tests/desktop_core.rs`:
   vault lifecycle + re-auth gating + generated-password handles + lock/unlock + reopen;
@@ -154,7 +163,10 @@ Environment: `AIPASS_HOME` (default `~/.aipass`), `AIPASS_CLOUD_URL`, `AIPASS_LO
 - `pnpm tauri build --debug --bundles app` succeeded: `src-tauri/target/debug/bundle/macos/AI 通行证.app`
   (contains `aipass-desktop`, `aipass-mcp`, `aipass-nm-host`). A smoke launch of the bundled app created
   `run/desktop.sock` + `run/desktop.token` (0600) and the bundled `aipass-nm-host` got a valid `hello`
-  reply. The UI itself was not clicked through (no GUI automation here). Not code-signed / notarized.
+  reply. A follow-up local run on 2026-11-01 built and launched the macOS app again, passed all
+  13 frontend tests, and clicked through the compiled frontend against the real Rust `AppCore` in a browser
+  (accounts, AI-host detection, executor resources and audit-chain verification). Native-window automation
+  timed out in this environment; the screenshots and capture method are documented above. Not code-signed / notarized.
 
 ### Windows / Linux notes
 
@@ -172,6 +184,10 @@ Environment: `AIPASS_HOME` (default `~/.aipass`), `AIPASS_CLOUD_URL`, `AIPASS_LO
 ## Limitations
 
 - Not independently security audited.
+- Recovery verification can race with background sync: an older sync snapshot can overwrite
+  `recovery_verified_at`, causing the recovery reminder to reappear. This was observed while preparing the
+  screenshot vault; serializing the verification and sync state updates needs a separate fix across clients.
+  恢复材料验证状态可能被并发的后台同步覆盖，界面会再次提示“恢复材料未验证”；本次截图保留了实际提醒。
 - Phone approvals need a relay URL in 设置 (official cloud relay or a self-hosted node) and a relay that
   accepts the executor's `exe_…` signature (the official / self-host relay resolves it from the vault
   member record the desktop writes when it enrols its executor). Tested against an in-process relay with a
