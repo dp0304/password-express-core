@@ -1,0 +1,18 @@
+{
+  "aad_dek": "aipass:v1:dek:vlt_01jbz3k6w8a7m2q4t5v9x0y1z0:ent_01jbz3k6w8a7m2q4t5v9x0y1z5:1:1",
+  "aad_entry": "aipass:v1:entry:vlt_01jbz3k6w8a7m2q4t5v9x0y1z0:ent_01jbz3k6w8a7m2q4t5v9x0y1z5:1:1",
+  "author_device_id": "dev_01jbz3k6w8a7m2q4t5v9x0y1z6",
+  "created_at": "2026-10-30T12:00:00Z",
+  "dek": "wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t8",
+  "dek_nonce": "EBESExQVFhcYGRobHB0eHyAhIiMkJSYn",
+  "description": "Entry version (CONTRACTS §2.3): wrapped_dek = XChaCha20Poly1305(VMK[epoch], dek_nonce, DEK, aad_dek); ciphertext = XChaCha20Poly1305(DEK, nonce, JCS(EntryPayload), aad_entry). Stored object bytes are JCS; manifest hash = b64u(sha256(object bytes)).",
+  "entry_id": "ent_01jbz3k6w8a7m2q4t5v9x0y1z5",
+  "key_epoch": 1,
+  "nonce": "MDEyMzQ1Njc4OTo7PD0-P0BBQkNERUZH",
+  "object_hash": "zNIP1-JoQtupNnbQe2UnynZs8O176-xYDHj8Oz-CDY4",
+  "object_jcs": "{\"author_device_id\":\"dev_01jbz3k6w8a7m2q4t5v9x0y1z6\",\"ciphertext\":\"lAQX0JfgBF-bd1Os4yWwd6v4J84MEmtd-U3iLQLU83uL8zsM3HW6GFcVVa-91nXJ3fLOjAz56slgHAdbfMkd9rLpiujKrR9hbhaUHl3djXyu4V2cT2bRU-RzQMt8VLLGf-1pant8O939psuacAlsDxcwcuI5jzcSpHjVbrAyVlCFf1DVuoTgZS7JpDrulIsxptRgEldg_EDp6B2MiwkaemwYtdoPdeIcUukypF_Tlq8jMclic3zWCK7KBaLgkzqPUzC8WK7QP-AWTOhtalGyBVDFTRlcgtb9yTN1_7FQNh5wdFV977gvbLdHDo4DvYwfLMVaDdbbNsLQj1Hry7BYkm-mqqAfaeoKKQ9xCSC8vI00zlf840Kmc7S04gVfl_WJSjQ4TkwI3ouYr0Ky0PqpoUQWiXMaDoq0A1d7KI5fst9CS3dJDRERvGCfx6mvJG5uGVOR2M-CgZt1C1aegp3Xwi88cz4Hgbdbq5_Z8Wjjkcfv7dkhWrA\",\"created_at\":\"2026-10-30T12:00:00Z\",\"dek_nonce\":\"EBESExQVFhcYGRobHB0eHyAhIiMkJSYn\",\"entry_id\":\"ent_01jbz3k6w8a7m2q4t5v9x0y1z5\",\"format\":1,\"key_epoch\":1,\"nonce\":\"MDEyMzQ1Njc4OTo7PD0-P0BBQkNERUZH\",\"vault_id\":\"vlt_01jbz3k6w8a7m2q4t5v9x0y1z0\",\"version\":1,\"wrapped_dek\":\"o29QVDdTtCe9jKB7oLrq9AQrKSskMGl39E2ucm4A7SMRyR3bPdYbBBtOkDfkHo1c\"}",
+  "payload_jcs": "{\"created_at\":\"2026-10-30T12:00:00Z\",\"database\":null,\"fields\":[],\"kind\":\"login\",\"lifecycle\":\"verified\",\"notes\":null,\"password_rules\":null,\"project_id\":null,\"secret\":\"correct horse battery staple\",\"source\":\"manual\",\"tags\":[],\"title\":\"Example\",\"totp\":null,\"updated_at\":\"2026-10-30T12:00:00Z\",\"urls\":[\"https://example.com/login\"],\"username\":\"alice@example.com\"}",
+  "vault_id": "vlt_01jbz3k6w8a7m2q4t5v9x0y1z0",
+  "version": 1,
+  "vmk": "oKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr8"
+}

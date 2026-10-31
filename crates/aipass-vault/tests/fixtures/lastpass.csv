@@ -1,0 +1,3 @@
+url,username,password,totp,extra,name,grouping,fav
+https://lp.example.com,lpuser,lp-pass,,,LP Site,Personal,0
+http://sn,,,,"Secret note body",My Note,Notes,0

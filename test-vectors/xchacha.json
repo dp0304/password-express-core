@@ -1,0 +1,21 @@
+{
+  "description": "XChaCha20-Poly1305 (AEAD_XCHACHA20_POLY1305, 24-byte nonce). `ciphertext` is ct||tag (16-byte tag appended), hex. Generated and verified by crates/aipass-crypto/tests/kat.rs.",
+  "vectors": [
+    {
+      "aad_hex": "50515253c0c1c2c3c4c5c6c7",
+      "ciphertext": "bd6d179d3e83d43b9576579493c0e939572a1700252bfaccbed2902c21396cbb731c7f1b0b4aa6440bf3a82f4eda7e39ae64c6708c54c216cb96b72e1213b4522f8c9ba40db5d945b11b69b982c1bb9e3f3fac2bc369488f76b2383565d3fff921f9664c97637da9768812f615c68b13b52ec0875924c1c7987947deafd8780acf49",
+      "key": "808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f",
+      "name": "draft-irtf-cfrg-xchacha-03 A.3.1",
+      "nonce": "404142434445464748494a4b4c4d4e4f5051525354555657",
+      "plaintext": "4c616469657320616e642047656e746c656d656e206f662074686520636c617373206f66202739393a204966204920636f756c64206f6666657220796f75206f6e6c79206f6e652074697020666f7220746865206675747572652c2073756e73637265656e20776f756c642062652069742e"
+    },
+    {
+      "aad_utf8": "aipass:v1:dek:vlt_01jbz3k6w8a7m2q4t5v9x0y1z0:ent_01jbz3k6w8a7m2q4t5v9x0y1z5:1:1",
+      "ciphertext": "e71cbe728f81653bc8046dfd3192cc2258885d1ef737f43e8c621a42570532fae90017cd6b4c54559be53189912a272a",
+      "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "name": "aipass DEK wrap (CONTRACTS §2.3 wrapped_dek)",
+      "nonce": "0f0e0d0c0b0a09080706050403020100f0f1f2f3f4f5f6f7",
+      "plaintext": "a0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebf"
+    }
+  ]
+}

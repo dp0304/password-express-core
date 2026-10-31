@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: Apache-2.0
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aipass-sdk"
+version = "0.1.0"
+description = "AI 通行证 (AI Pass) Python SDK — let custom agents use accounts within user-approved scopes without ever seeing raw credentials."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [{ name = "AI Pass contributors" }]
+keywords = ["aipass", "ai-pass", "credentials", "agent", "mcp", "tool-calling", "approval"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Operating System :: POSIX",
+  "Operating System :: MacOS",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Typing :: Typed",
+]
+dependencies = [
+  "httpx>=0.27,<1",
+  "cryptography>=42",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8",
+  "mypy>=1.10; python_version >= '3.10'",
+  "ruff>=0.6",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aipass"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/aipass", "tests", "examples", "README.md", "README.en.md", "LICENSE", "pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = ["error"]
+
+[tool.mypy]
+# mypy ≥ 2 cannot target 3.9; 3.9 compatibility is verified by running the test suite on 3.9.
+python_version = "3.10"
+strict = true
+files = ["src/aipass"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "RUF"]
+# E501: `ruff format` wraps code; the remaining long lines are bilingual string literals.
+ignore = ["E501", "S101", "RUF001", "RUF002", "RUF003", "UP006", "UP007", "UP035", "UP045"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["aipass"]
+known-local-folder = ["mock_broker", "conftest"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S105", "S106", "S108", "S311", "S603", "S607", "B017"]
+"examples/*" = ["S105"]

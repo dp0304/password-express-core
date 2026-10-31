@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "aipass-crypto"
+description = "AI Pass cryptographic primitives: XChaCha20-Poly1305, HPKE (RFC 9180), Ed25519/X25519 identities, HKDF-SHA256, Argon2id, CSPRNG and zeroizing secret wrappers."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+chacha20poly1305.workspace = true
+hpke.workspace = true
+ed25519-dalek.workspace = true
+x25519-dalek.workspace = true
+hkdf.workspace = true
+hmac.workspace = true
+sha2.workspace = true
+argon2.workspace = true
+rand_core.workspace = true
+getrandom.workspace = true
+zeroize.workspace = true
+subtle.workspace = true
+base64.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+hex.workspace = true
+
+[lints]
+workspace = true

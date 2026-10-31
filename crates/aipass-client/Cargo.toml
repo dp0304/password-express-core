@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "aipass-client"
+description = "AI Pass Rust HTTP client for the broker API (request signing, UDS and TCP), connection keys, pairing and the cloud tunnel client."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[features]
+default = []
+# In-process mock broker (C endpoints + pairing, real AIPass-Sig verification) for tests of
+# this crate and of downstream crates (aipass-mcp, aipass-cli). Never enabled in release builds.
+test-support = ["dep:axum"]
+
+[dependencies]
+aipass-types.workspace = true
+aipass-crypto.workspace = true
+reqwest.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+http-body-util.workspace = true
+http.workspace = true
+bytes.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+url.workspace = true
+tracing.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+tokio-tungstenite.workspace = true
+chrono.workspace = true
+zeroize.workspace = true
+dirs.workspace = true
+axum = { workspace = true, optional = true }
+
+[dev-dependencies]
+# self dev-dependency: integration tests use the mock broker
+aipass-client = { path = ".", features = ["test-support"] }
+tempfile.workspace = true
+axum.workspace = true
+tokio-tungstenite.workspace = true
+
+[lints]
+workspace = true

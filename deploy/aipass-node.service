@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: Apache-2.0
+# systemd unit for the AI Pass self-host node.
+# Install: useradd --system --home /var/lib/aipass --shell /usr/sbin/nologin aipass
+#          install -m 0755 aipass-node /usr/local/bin/ ; install -d -m 0700 -o aipass /var/lib/aipass
+#          install -m 0640 -g aipass node.example.toml /etc/aipass/node.toml   (edit it)
+#          systemctl enable --now aipass-node
+[Unit]
+Description=AI Pass self-host node (broker, executor, sync, relay, remote MCP)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=aipass
+Group=aipass
+ExecStart=/usr/local/bin/aipass-node --config /etc/aipass/node.toml run
+Restart=on-failure
+RestartSec=3
+Environment=AIPASS_LOG=info
+StateDirectory=aipass
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/aipass
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+SystemCallArchitectures=native
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target

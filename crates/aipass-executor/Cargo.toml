@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "aipass-executor"
+description = "AI Pass Executor and connectors (postgres, github, http_api) with egress guard and output filter."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[features]
+default = []
+# V1.1 features (UI: 实验性 / experimental), off by default: `credentials.rotate`
+# (postgres.password), postgres `lease_mode: "temporary_role"`, and the SiteAdapter /
+# demo adapter for `accounts.create`.
+experimental = []
+# Test-only hooks (GitHub API base override, rotation fault injection). Never enable in a
+# production build; none of these can be switched on from resource config.
+test-util = []
+
+[dependencies]
+aipass-types.workspace = true
+aipass-crypto.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+tokio-postgres.workspace = true
+tokio-postgres-rustls.workspace = true
+# Client-side SCRAM-SHA-256 verifier for ALTER/CREATE ROLE … PASSWORD (experimental rotation
+# and temporary roles) so a cleartext password never appears in a SQL statement or server log.
+postgres-protocol = "0.6.12"
+rustls.workspace = true
+rustls-pki-types.workspace = true
+webpki-roots.workspace = true
+reqwest.workspace = true
+hickory-resolver.workspace = true
+ipnet.workspace = true
+url.workspace = true
+percent-encoding.workspace = true
+base64.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+regex.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+zeroize.workspace = true
+chrono.workspace = true
+
+[dev-dependencies]
+# Self dev-dependency: integration tests use the `test-util` hooks.
+aipass-executor = { path = ".", features = ["test-util"] }
+axum.workspace = true
+tokio-rustls.workspace = true
+tempfile.workspace = true
+tracing-subscriber.workspace = true
+rcgen = { version = "0.14.10", default-features = false, features = ["aws_lc_rs", "pem"] }
+
+[lints]
+workspace = true

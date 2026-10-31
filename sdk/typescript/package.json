@@ -1,0 +1,57 @@
+{
+  "name": "@aipass/sdk",
+  "version": "0.1.0",
+  "description": "AI 通行证 (AI Pass) TypeScript SDK — let custom agents use accounts within user-approved scopes without ever seeing raw credentials.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "aipass",
+    "ai-pass",
+    "credentials",
+    "agent",
+    "mcp",
+    "tool-calling",
+    "approval"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:dist": "node scripts/check-dist.mjs",
+    "lint:package": "publint",
+    "check": "pnpm run typecheck && pnpm run build && pnpm run test && pnpm run test:dist && pnpm run lint:package"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.43",
+    "publint": "0.3.25",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  }
+}

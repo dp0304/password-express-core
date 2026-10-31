@@ -1,0 +1,39 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "aipass-broker"
+description = "AI Pass Access Broker: connections, policies, grants, approvals, operation state machine, budgets, revocation, audit and HTTP API."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+aipass-types.workspace = true
+aipass-crypto.workspace = true
+rusqlite.workspace = true
+axum.workspace = true
+tokio.workspace = true
+tokio-util.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+tracing.workspace = true
+http.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+bytes.workspace = true
+futures.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+http-body-util.workspace = true
+
+[lints]
+workspace = true

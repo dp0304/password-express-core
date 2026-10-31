@@ -1,0 +1,17 @@
+target/
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+coverage/
+.build/
+.swiftpm/

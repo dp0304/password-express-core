@@ -1,0 +1,15 @@
+{
+  "aad_join": "aipass:v1:pairing:join:pair_01jbz3k6w8a7m2q4t5v9x0y1z9",
+  "description": "Pairing (CONTRACTS §5): shared = X25519(eO, eN); th = SHA-256(JCS({pairing_id, eN, eO, relay})); K = HKDF(shared, salt=th, info='aipass/v1/pairing-key'); SAS = u32_be(HKDF(shared, salt=th, info='aipass/v1/pairing-sas', 4 bytes)) mod 1e6, zero-padded.",
+  "eN": "B6N8vBQgk8i3VdwbEOhstCY3StFqqFPtC9_AsrhtHHw",
+  "eN_secret": "AQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyA",
+  "eO": "WGmv9FBUlzLLqu1eXfmzCm2jHLDldCutWtShp2jxpns",
+  "eO_secret": "ISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0-P0A",
+  "k": "bBN3MaVUcMCIs88uRThZdn7VP23pLc8CjFl__6YQwkc",
+  "pairing_id": "pair_01jbz3k6w8a7m2q4t5v9x0y1z9",
+  "relay": "https://relay.aipass.example",
+  "sas": "589925",
+  "shared": "qE3Hw8jwWLGy3EzR6bXcCnmH-ItqlWTN4zkfxCEVnnc",
+  "th": "BvSizITX99kQPiKlvRy87a_xWynInPvrdsPT57M0868",
+  "transcript_jcs": "{\"eN\":\"B6N8vBQgk8i3VdwbEOhstCY3StFqqFPtC9_AsrhtHHw\",\"eO\":\"WGmv9FBUlzLLqu1eXfmzCm2jHLDldCutWtShp2jxpns\",\"pairing_id\":\"pair_01jbz3k6w8a7m2q4t5v9x0y1z9\",\"relay\":\"https://relay.aipass.example\"}"
+}

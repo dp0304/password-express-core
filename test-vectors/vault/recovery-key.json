@@ -1,0 +1,14 @@
+{
+  "description": "Recovery key (CONTRACTS §2.4): secret ‖ sha256(secret)[0..2] → Crockford base32 → AIPR- + groups of 4. KEK = HKDF-SHA256(ikm=secret, salt=UTF-8(vault_id), info='aipass/v1/recovery-kek'). Recovery member identity: seed = HKDF(secret, vault_id, 'aipass/v1/recovery-sign'), kem = HKDF(secret, vault_id, 'aipass/v1/recovery-kem'); device id = dev_ + ULID(sha256('aipass/v1/recovery-device-id' ‖ sign_pk)[0..16]).",
+  "formatted": "AIPR-810M-4GT4-8N34-EJ29-995M-RKAE-9X85-2MJK-AHAN-CNTR-B5D5-PQ2X-BSFW-MAG",
+  "kek": "FjSiUUaek5UT1L8bW3MM4SqA3AP1vAWImbd1VB_5dcg",
+  "parse_inputs_equivalent": [
+    "aipr 810m 4gt4 8n34 ej29 995m rkae 9x85 2mjk ahan cntr b5d5 pq2x bsfw mag",
+    "81OM-4GT4-8N34-EJ29-995M-RKAE-9X85-2MJK-AHAN-CNTR-B5D5-PQ2X-BSFW-MAG"
+  ],
+  "recovery_device_id": "dev_631m14110zr0hsnjw8dpneex0h",
+  "recovery_kem_pk": "SWlBOUz7JalZizyVEHvWXPERu0ZVY8rmdYgYYz73MCo",
+  "recovery_sign_pk": "vYMdhG-xAQfVojpDG_9cL9Zs8oHLdNS1GF77Pde0Glg",
+  "secret": "QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl8",
+  "vault_id": "vlt_01jbz3k6w8a7m2q4t5v9x0y1z0"
+}

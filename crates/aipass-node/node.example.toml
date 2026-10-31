@@ -1,0 +1,59 @@
+# SPDX-License-Identifier: Apache-2.0
+# AI 通行证 (AI Pass) self-host node — example configuration.
+# 自托管节点示例配置。复制为 node.toml 后按需修改。
+
+[node]
+# Shown on approval cards as the executor name / 审批卡片上显示的执行设备名称
+name = "my-node"
+# Keys, broker.db, ciphertext sync blobs and relay.db live here (created 0700).
+# 密钥、broker.db、密文同步数据与 relay.db 存放在此目录（权限 0700）。
+data_dir = "/var/lib/aipass"
+# Container / server: "0.0.0.0:7878"; local development: "127.0.0.1:7878".
+listen = "127.0.0.1:7878"
+# Public base URL behind your TLS reverse proxy (used in pairing links and MCP metadata).
+# 反向代理（TLS）之后的公开地址，用于配对链接与 MCP 元数据。
+# public_url = "https://node.example.com"
+# Optional local admin socket (0600; same-uid peers are admin).
+# admin_socket = "/var/lib/aipass/run/admin.sock"
+experimental = false
+# The node serves plain HTTP. Put Caddy/nginx with TLS in front of it on any network.
+# 节点本身只提供 HTTP；在任何网络上都请用带 TLS 的反向代理。
+tls_terminated_by_proxy = false
+
+[executor]
+enabled = true
+# "compatible" (兼容连接) unless this node runs on a host/VM separate from the machines
+# where AI agents run. "isolated" (隔离执行) requires an operator attestation.
+protection_level = "compatible"
+# isolation_attestation = "Dedicated VM on a separate host; AI agents have no shell access."
+# extra_root_certs = "/etc/aipass/private-ca.pem"
+
+[sync]
+# Ciphertext sync server (/v1/vaults). Vault creation needs an enroll token:
+#   aipass-node enroll-token create --config node.toml
+enabled = true
+# quota_bytes_per_vault = 1073741824
+
+[relay]
+# E2E relay mailboxes (/v1/relay). The relay only sees sealed envelopes.
+enabled = true
+# Relay the broker uses to reach your phone / trusted devices (default: this node).
+# url = "https://cloud.aipass.example"
+# Optional push webhook; receives only {mailbox, message_id}.
+# webhook_url = "https://push.example.com/aipass"
+# webhook_secret_file = "/etc/aipass/webhook.secret"
+
+[mcp]
+# Remote MCP endpoint /mcp with node-issued bearer tokens (aipc_…):
+#   aipass-node connection create --config node.toml --name "ChatGPT" --host chatgpt
+enabled = true
+allowed_origins = []
+
+[cloud]
+# Used by `aipass-node cloud link --code …` (optional commercial gateway).
+url = "https://cloud.aipass.example"
+tunnel = true
+
+[log]
+format = "text"   # or "json"
+filter = "info"   # overridden by AIPASS_LOG

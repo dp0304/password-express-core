@@ -1,0 +1,25 @@
+{
+  "seed": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+  "public_key": "A6EHv_POEL4dcN0Y50vAmWfk1jCbpQ1fHdyGZBJVMbg",
+  "kid": "conn_01jbz3k6w8a7m2q4t5v9x0y1z4",
+  "ts": 1793318400,
+  "nonce": "qqqqqqqqqqqqqqqqqqqqqg",
+  "cases": [
+    {
+      "method": "POST",
+      "path": "/v1/operations",
+      "body": "{\"resource_id\":\"res_01jbz3k6w8a7m2q4t5v9x0y1z2\",\"operation\":\"postgres.query_view\",\"parameters\":{\"view\":\"analytics.subscription_daily\",\"fields\":[\"day\",\"plan\",\"subscriptions\"],\"period_days\":30},\"idempotency_key\":\"subscription-summary-request-001\"}",
+      "body_sha256": "xR8hGf1lWFHmtsMZF81X1VBrAPQQyuFe2wpLmxcaLjE",
+      "string_to_sign": "AIPASS-SIG-V1\nPOST\n/v1/operations\n1793318400\nqqqqqqqqqqqqqqqqqqqqqg\nxR8hGf1lWFHmtsMZF81X1VBrAPQQyuFe2wpLmxcaLjE",
+      "signature": "bkY5XhOuTqE-0g0GA_J5SPOZgk67xYrVj77Koc0EBsWGH-APHWHBuGx1MojhxBSiYyV4Cj2Llu1xmAyRITt1Aw"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/resources?project_id=proj_01jbz3k6w8a7m2q4t5v9x0y1z3",
+      "body": "",
+      "body_sha256": "47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU",
+      "string_to_sign": "AIPASS-SIG-V1\nGET\n/v1/resources?project_id=proj_01jbz3k6w8a7m2q4t5v9x0y1z3\n1793318400\nqqqqqqqqqqqqqqqqqqqqqg\n47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU",
+      "signature": "z-FXrTabpsAztih0b7vQ-r9wqLCSnkTZtGHBrGgL9U5aT6Nt4usP6qgRQb_FBzyl_DQ0xrNb0oSuphvOvmOjDg"
+    }
+  ]
+}

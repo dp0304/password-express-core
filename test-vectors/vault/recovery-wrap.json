@@ -1,0 +1,8 @@
+{
+  "aad": "aipass:v1:recovery:vlt_01jbz3k6w8a7m2q4t5v9x0y1z0:1:recovery_key",
+  "description": "recovery/<epoch>-recovery_key.json: wrapped_vmk = XChaCha20Poly1305(KEK, nonce, VMK, aad = aipass:v1:recovery:{vault_id}:{epoch}:{kind}).",
+  "kek": "FjSiUUaek5UT1L8bW3MM4SqA3AP1vAWImbd1VB_5dcg",
+  "object_jcs": "{\"format\":1,\"kdf\":{\"alg\":\"hkdf-sha256\"},\"key_epoch\":1,\"kind\":\"recovery_key\",\"nonce\":\"UFFSU1RVVldYWVpbXF1eX2BhYmNkZWZn\",\"vault_id\":\"vlt_01jbz3k6w8a7m2q4t5v9x0y1z0\",\"wrapped_vmk\":\"acRnruAZRSjaivcval7Hb5xrxKW3b9yA1j-LoJETDSfQ-JLV6tjkHYdyriieFcIF\"}",
+  "recovery_secret": "QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl8",
+  "vmk": "oKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr8"
+}

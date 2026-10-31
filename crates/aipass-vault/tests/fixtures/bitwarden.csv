@@ -1,0 +1,5 @@
+folder,favorite,type,name,notes,fields,reprompt,login_uri,login_username,login_password,login_totp
+Work,1,login,Jira,,"pin: 1234
+team: core",0,https://jira.example.com,dev@example.com,bw-pass,JBSWY3DPEHPK3PXP
+,,note,Wifi notes,The wifi password is in the drawer,,0,,,,
+,,card,Visa,,,0,,,,

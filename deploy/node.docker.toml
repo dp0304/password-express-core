@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+# Container configuration. TLS is terminated by your reverse proxy in front of port 7878.
+[node]
+name = "docker-node"
+data_dir = "/var/lib/aipass"
+listen = "0.0.0.0:7878"
+# public_url = "https://node.example.com"
+tls_terminated_by_proxy = true
+
+[executor]
+protection_level = "compatible"
+
+[log]
+format = "json"
+filter = "info"

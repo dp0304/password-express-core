@@ -1,0 +1,11 @@
+{
+  "aad": "aipass:v1:vmk:vlt_01jbz3k6w8a7m2q4t5v9x0y1z0:dev_01jbz3k6w8a7m2q4t5v9x0y1z6:1",
+  "description": "VMK sealed to a member device: HPKE RFC 9180 base mode DHKEM(X25519,HKDF-SHA256)/HKDF-SHA256/ChaCha20Poly1305, info='aipass/v1/vmk-wrap', aad='aipass:v1:vmk:{vault_id}:{device_id}:{key_epoch}'. HPKE uses a fresh ephemeral key, so this file is a decrypt-only vector: open `sealed` with the recipient KEM secret.",
+  "recipient_kem_pk": "ST6C_HRGSlkmiBdiPSBTxeuOLMSpiLT-4XnsawENUx0",
+  "recipient_kem_secret": "gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp8",
+  "sealed": {
+    "ct": "JH-fJtEsSmMUi9QfM8bD_VtiGu4lLYHA2DFS97Ku1HLSvckeyoq18r7d7N_2ZkTl",
+    "enc": "Ff0iwzy6todqQAakrsgSC39H49au8lhhlj2_tB2koBM"
+  },
+  "vmk": "oKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr8"
+}

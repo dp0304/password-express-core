@@ -1,0 +1,183 @@
+{
+  "approval_request": {
+    "approval_request_id": "apr_01jbz3k6w8a7m2q4t5v9x0y1z5",
+    "connection": {
+      "connection_id": "conn_01jbz3k6w8a7m2q4t5v9x0y1z4",
+      "display_name": "Claude Code",
+      "host_type": "claude_code",
+      "verified": true
+    },
+    "created_at": "2026-10-30T12:00:00Z",
+    "excluded_fields": {
+      "analytics.subscription_daily": [
+        "customer_email"
+      ]
+    },
+    "executor": {
+      "executor_id": "exe_01jbz3k6w8a7m2q4t5v9x0y1z7",
+      "name": "我的服务器",
+      "protection_level": "isolated"
+    },
+    "expires_at": "2026-10-30T12:02:00Z",
+    "kind": "operation",
+    "operation_id": "op_01jbz3k6w8a7m2q4t5v9x0y1z6",
+    "parameters_digest": "-YHRPprue4WujDnfjDnATlsCr_2bskl6sib20Y_O6E8",
+    "recipients": [
+      {
+        "connection_id": "conn_01jbz3k6w8a7m2q4t5v9x0y1z4",
+        "display_name": "Claude Code"
+      }
+    ],
+    "requested": {
+      "duration_seconds": 900,
+      "limits": {
+        "max_requests_per_grant": 20,
+        "max_result_bytes": 262144,
+        "max_rows_per_grant": 5000,
+        "max_rows_per_operation": 1000
+      },
+      "mode": "task",
+      "operations": [
+        "postgres.query_view",
+        "postgres.query_view"
+      ],
+      "scope": {
+        "operations": [
+          "postgres.query_view"
+        ],
+        "postgres": {
+          "views": {
+            "analytics.subscription_daily": [
+              "subscriptions",
+              "day",
+              "plan"
+            ]
+          }
+        }
+      }
+    },
+    "resource": {
+      "alias": "路亚站测试库",
+      "environment": "test",
+      "resource_id": "res_01jbz3k6w8a7m2q4t5v9x0y1z2",
+      "service": "postgres"
+    },
+    "status": "pending",
+    "summary": {
+      "en": "Query the subscription statistics view",
+      "zh": "查询订阅统计视图"
+    }
+  },
+  "cases": [
+    {
+      "decision": {
+        "approval_request_id": "apr_01jbz3k6w8a7m2q4t5v9x0y1z5",
+        "approved": {
+          "duration_seconds": 900,
+          "limits": {
+            "max_requests_per_grant": 20,
+            "max_result_bytes": 262144,
+            "max_rows_per_grant": 5000,
+            "max_rows_per_operation": 1000
+          },
+          "mode": "task",
+          "operations": [
+            "postgres.query_view",
+            "postgres.query_view"
+          ],
+          "scope": {
+            "operations": [
+              "postgres.query_view"
+            ],
+            "postgres": {
+              "views": {
+                "analytics.subscription_daily": [
+                  "subscriptions",
+                  "day",
+                  "plan"
+                ]
+              }
+            }
+          }
+        },
+        "decision": "approve",
+        "digest": "OzyE8QH3trfRB53vmMabZwZC92YEGoxutv8JbC5Uu_o",
+        "expires_at": "2026-10-30T12:15:30Z",
+        "signature": "Z1fOPiQ6eBWzSWrIVdQHlMzgLdkHOlrpPFMmDKKM4yddGCUNkjsrepklMqsAStg7xNn5XUaW6dfcg-N42Y7iBw",
+        "signed_at": "2026-10-30T12:00:30Z",
+        "signer_device_id": "dev_01jbz3k6w8a7m2q4t5v9x0y1z8"
+      },
+      "digest": "OzyE8QH3trfRB53vmMabZwZC92YEGoxutv8JbC5Uu_o",
+      "digest_document": "{\"approval_request_id\":\"apr_01jbz3k6w8a7m2q4t5v9x0y1z5\",\"connection_id\":\"conn_01jbz3k6w8a7m2q4t5v9x0y1z4\",\"executor_id\":\"exe_01jbz3k6w8a7m2q4t5v9x0y1z7\",\"expires_at\":\"2026-10-30T12:15:30Z\",\"limits\":{\"max_requests_per_grant\":20,\"max_result_bytes\":262144,\"max_rows_per_grant\":5000,\"max_rows_per_operation\":1000},\"mode\":\"task\",\"operation_id\":\"op_01jbz3k6w8a7m2q4t5v9x0y1z6\",\"operations\":[\"postgres.query_view\"],\"parameters_digest\":\"-YHRPprue4WujDnfjDnATlsCr_2bskl6sib20Y_O6E8\",\"recipients\":[\"conn_01jbz3k6w8a7m2q4t5v9x0y1z4\"],\"resource_id\":\"res_01jbz3k6w8a7m2q4t5v9x0y1z2\",\"scope\":{\"operations\":[\"postgres.query_view\"],\"postgres\":{\"views\":{\"analytics.subscription_daily\":[\"day\",\"plan\",\"subscriptions\"]}}},\"v\":2}",
+      "name": "approve as requested",
+      "signature": "Z1fOPiQ6eBWzSWrIVdQHlMzgLdkHOlrpPFMmDKKM4yddGCUNkjsrepklMqsAStg7xNn5XUaW6dfcg-N42Y7iBw",
+      "signing_message": "aipass:v1:approval:approve:OzyE8QH3trfRB53vmMabZwZC92YEGoxutv8JbC5Uu_o"
+    },
+    {
+      "decision": {
+        "approval_request_id": "apr_01jbz3k6w8a7m2q4t5v9x0y1z5",
+        "approved": {
+          "duration_seconds": 300,
+          "limits": {
+            "max_requests_per_grant": 20,
+            "max_result_bytes": 262144,
+            "max_rows_per_grant": 5000,
+            "max_rows_per_operation": 100
+          },
+          "mode": "once",
+          "operations": [
+            "postgres.query_view",
+            "postgres.query_view"
+          ],
+          "scope": {
+            "operations": [
+              "postgres.query_view"
+            ],
+            "postgres": {
+              "views": {
+                "analytics.subscription_daily": [
+                  "day",
+                  "subscriptions"
+                ]
+              }
+            }
+          }
+        },
+        "decision": "approve",
+        "digest": "Pk2KN44NgnSt1ndXZzPQ5d0hFjuxyGLBaQ4kQchKetw",
+        "expires_at": "2026-10-30T12:05:30Z",
+        "signature": "RD5bqauJHud54Ykorpd8pUfoLJYIF3-CNfak2pcnHmx-IUEyU7BBQMO2KZ99vifOYonR58Pt76YKBxs1I30kDg",
+        "signed_at": "2026-10-30T12:00:30Z",
+        "signer_device_id": "dev_01jbz3k6w8a7m2q4t5v9x0y1z8"
+      },
+      "digest": "Pk2KN44NgnSt1ndXZzPQ5d0hFjuxyGLBaQ4kQchKetw",
+      "digest_document": "{\"approval_request_id\":\"apr_01jbz3k6w8a7m2q4t5v9x0y1z5\",\"connection_id\":\"conn_01jbz3k6w8a7m2q4t5v9x0y1z4\",\"executor_id\":\"exe_01jbz3k6w8a7m2q4t5v9x0y1z7\",\"expires_at\":\"2026-10-30T12:05:30Z\",\"limits\":{\"max_requests_per_grant\":20,\"max_result_bytes\":262144,\"max_rows_per_grant\":5000,\"max_rows_per_operation\":100},\"mode\":\"once\",\"operation_id\":\"op_01jbz3k6w8a7m2q4t5v9x0y1z6\",\"operations\":[\"postgres.query_view\"],\"parameters_digest\":\"-YHRPprue4WujDnfjDnATlsCr_2bskl6sib20Y_O6E8\",\"recipients\":[\"conn_01jbz3k6w8a7m2q4t5v9x0y1z4\"],\"resource_id\":\"res_01jbz3k6w8a7m2q4t5v9x0y1z2\",\"scope\":{\"operations\":[\"postgres.query_view\"],\"postgres\":{\"views\":{\"analytics.subscription_daily\":[\"day\",\"subscriptions\"]}}},\"v\":2}",
+      "name": "approve narrowed (fewer fields, lower limits, shorter, once)",
+      "signature": "RD5bqauJHud54Ykorpd8pUfoLJYIF3-CNfak2pcnHmx-IUEyU7BBQMO2KZ99vifOYonR58Pt76YKBxs1I30kDg",
+      "signing_message": "aipass:v1:approval:approve:Pk2KN44NgnSt1ndXZzPQ5d0hFjuxyGLBaQ4kQchKetw"
+    },
+    {
+      "decision": {
+        "approval_request_id": "apr_01jbz3k6w8a7m2q4t5v9x0y1z5",
+        "decision": "deny",
+        "digest": "b10CzDBCANtqSTNyiV0nCRFu6wzm215PaYx6CpJbnlY",
+        "expires_at": "2026-10-30T12:02:00Z",
+        "signature": "nCowlgkb47Tcdm9jXXcZz90v86mitwQbRlvDyTK1T8DcQWfk8O_g9lQPWIG5wcFHu-9tKYMRO6IMH6YhXz5hCw",
+        "signed_at": "2026-10-30T12:00:30Z",
+        "signer_device_id": "dev_01jbz3k6w8a7m2q4t5v9x0y1z8"
+      },
+      "digest": "b10CzDBCANtqSTNyiV0nCRFu6wzm215PaYx6CpJbnlY",
+      "digest_document": "{\"approval_request_id\":\"apr_01jbz3k6w8a7m2q4t5v9x0y1z5\",\"connection_id\":\"conn_01jbz3k6w8a7m2q4t5v9x0y1z4\",\"executor_id\":\"exe_01jbz3k6w8a7m2q4t5v9x0y1z7\",\"expires_at\":\"2026-10-30T12:02:00Z\",\"limits\":{\"max_requests_per_grant\":20,\"max_result_bytes\":262144,\"max_rows_per_grant\":5000,\"max_rows_per_operation\":1000},\"mode\":\"task\",\"operation_id\":\"op_01jbz3k6w8a7m2q4t5v9x0y1z6\",\"operations\":[\"postgres.query_view\"],\"parameters_digest\":\"-YHRPprue4WujDnfjDnATlsCr_2bskl6sib20Y_O6E8\",\"recipients\":[\"conn_01jbz3k6w8a7m2q4t5v9x0y1z4\"],\"resource_id\":\"res_01jbz3k6w8a7m2q4t5v9x0y1z2\",\"scope\":{\"operations\":[\"postgres.query_view\"],\"postgres\":{\"views\":{\"analytics.subscription_daily\":[\"day\",\"plan\",\"subscriptions\"]}}},\"v\":2}",
+      "name": "deny",
+      "signature": "nCowlgkb47Tcdm9jXXcZz90v86mitwQbRlvDyTK1T8DcQWfk8O_g9lQPWIG5wcFHu-9tKYMRO6IMH6YhXz5hCw",
+      "signing_message": "aipass:v1:approval:deny:b10CzDBCANtqSTNyiV0nCRFu6wzm215PaYx6CpJbnlY"
+    }
+  ],
+  "description": "CONTRACTS §7 approval digest v2: digest = b64u(SHA-256(JCS(digest_document))); signature = Ed25519(signer, signing_message). Signer seed is bytes 0x20..0x3f. `now` is the verification time. Generated and checked by crates/aipass-types/tests/vectors.rs.",
+  "now": "2026-10-30T12:00:30Z",
+  "request_digest": "nuxiE6jNpDrZ2CwwNKumNwE1bwgwUkOe4fCeSiNx9o0",
+  "request_digest_note": "request_digest = b64u(SHA-256(JCS(approval_request minus \"status\"))) — display-level hash clients pass back with approve/deny (FFI)",
+  "signer_device_id": "dev_01jbz3k6w8a7m2q4t5v9x0y1z8",
+  "signer_public_key": "Kay64UG8yvCyLhqU000LxzYeUm0L_hLIl5S8kyKWbdc",
+  "signer_seed": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8"
+}

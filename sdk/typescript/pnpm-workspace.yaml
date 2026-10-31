@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# Standalone pnpm root for @aipass/sdk so installs never attach to another workspace.
+packages:
+  - "."
+# esbuild (used by tsup/vitest at dev time only) validates its platform binary in a postinstall script.
+allowBuilds:
+  esbuild: true

@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: Apache-2.0
+# AI Pass node + the lure-store demo PostgreSQL (walkthrough in deploy/README.md).
+# Not tested in the build environment (Docker is not installed there).
+services:
+  node:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: aipass-node:local
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:7878:7878"   # publish only on loopback; put a TLS proxy in front for remote use
+    volumes:
+      - aipass-data:/var/lib/aipass
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    depends_on:
+      - demo-db
+
+  demo-db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lure
+      POSTGRES_USER: postgres
+      # superuser password for the demo container only; the AI never sees any DB password
+      POSTGRES_PASSWORD_FILE: /run/secrets/demo_pg_superuser
+    secrets:
+      - demo_pg_superuser
+    volumes:
+      - ./examples/lure-store/schema.sql:/docker-entrypoint-initdb.d/10-schema.sql:ro
+      - demo-db:/var/lib/postgresql/data
+
+secrets:
+  demo_pg_superuser:
+    file: ./demo_pg_superuser.secret   # create it: openssl rand -base64 24 > deploy/demo_pg_superuser.secret
+
+volumes:
+  aipass-data:
+  demo-db:

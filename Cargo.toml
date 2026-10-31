@@ -1,0 +1,182 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# AI 通行证 (AI Pass) — open-source core workspace.
+#
+# Workspace rules (see docs/spec/CONTRACTS.md §0):
+#   * Members and [workspace.dependencies] are owned by the foundation step.
+#   * Crate owners may append dependency lines to their OWN crate's Cargo.toml
+#     (prefer `dep.workspace = true`), but must not reorganise this file.
+#   * TLS: the whole workspace uses rustls with the **aws-lc-rs** crypto provider
+#     (rustls' default). Never enable the `ring` provider anywhere — with two
+#     providers compiled in, `rustls::ClientConfig::builder()` panics at runtime.
+
+[workspace]
+resolver = "3"
+members = [
+    "crates/aipass-types",
+    "crates/aipass-crypto",
+    "crates/aipass-vault",
+    "crates/aipass-storage",
+    "crates/aipass-sync",
+    "crates/aipass-sync-server",
+    "crates/aipass-broker",
+    "crates/aipass-executor",
+    "crates/aipass-client",
+    "crates/aipass-mcp",
+    "crates/aipass-hostconfig",
+    "crates/aipass-node",
+    "crates/aipass-cli",
+    "crates/aipass-ffi",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+authors = ["AI Pass contributors"]
+repository = "https://github.com/aipass-example/aipass"
+homepage = "https://aipass.example"
+publish = false
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+unused_must_use = "deny"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+todo = "deny"
+unimplemented = "deny"
+
+[workspace.dependencies]
+# ---- internal crates -------------------------------------------------------
+aipass-types = { path = "crates/aipass-types", version = "0.1.0" }
+aipass-crypto = { path = "crates/aipass-crypto", version = "0.1.0" }
+aipass-vault = { path = "crates/aipass-vault", version = "0.1.0" }
+aipass-storage = { path = "crates/aipass-storage", version = "0.1.0" }
+aipass-sync = { path = "crates/aipass-sync", version = "0.1.0" }
+aipass-sync-server = { path = "crates/aipass-sync-server", version = "0.1.0" }
+aipass-broker = { path = "crates/aipass-broker", version = "0.1.0" }
+aipass-executor = { path = "crates/aipass-executor", version = "0.1.0" }
+aipass-client = { path = "crates/aipass-client", version = "0.1.0" }
+aipass-mcp = { path = "crates/aipass-mcp", version = "0.1.0" }
+aipass-hostconfig = { path = "crates/aipass-hostconfig", version = "0.1.0" }
+aipass-node = { path = "crates/aipass-node", version = "0.1.0" }
+aipass-cli = { path = "crates/aipass-cli", version = "0.1.0" }
+aipass-ffi = { path = "crates/aipass-ffi", version = "0.1.0" }
+
+# ---- async runtime & futures ----------------------------------------------
+tokio = { version = "1.54", features = ["full"] }
+tokio-util = { version = "0.7.20", features = ["rt", "io", "codec"] }
+futures = "0.3.34"
+async-trait = "0.1.92"
+
+# ---- HTTP server / client ---------------------------------------------------
+axum = { version = "0.8.9", features = ["ws", "macros"] }
+tower = { version = "0.5.3", features = ["util", "timeout", "limit"] }
+tower-http = { version = "0.7.1", features = ["trace", "cors", "limit", "timeout", "request-id", "sensitive-headers", "set-header", "util"] }
+hyper = { version = "1.12", features = ["full"] }
+hyper-util = { version = "0.1.21", features = ["full"] }
+http = "1.5"
+http-body-util = "0.1.3"
+bytes = "1.12"
+# reqwest 0.13: `rustls` = rustls + aws-lc-rs provider + platform verifier. No OpenSSL.
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls", "json", "stream", "http2", "query", "form"] }
+rustls = "0.23.46"
+rustls-pki-types = "1.13"
+tokio-rustls = "0.26.6"
+webpki-roots = "1.0.11"
+tokio-tungstenite = { version = "0.30", features = ["rustls-tls-webpki-roots"] }
+
+# ---- serialization ----------------------------------------------------------
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+toml = "1.1.8"
+toml_edit = "0.25.17"
+csv = "1.4"
+quick-xml = "0.42"
+
+# ---- errors, logging --------------------------------------------------------
+thiserror = "2.0.21"
+anyhow = "1.0.104"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt", "json"] }
+
+# ---- time, ids, encoding ----------------------------------------------------
+chrono = { version = "0.4.45", default-features = false, features = ["std", "clock", "serde"] }
+ulid = "3.0"
+base64 = "0.23.1"
+hex = "0.4.3"
+data-encoding = "2.11"
+url = { version = "2.5.8", features = ["serde"] }
+percent-encoding = "2.3.2"
+psl = "2.1.245"
+publicsuffix = "2.3"
+ipnet = { version = "2.12", features = ["serde"] }
+regex = "1.13"
+once_cell = "1.21"
+
+# ---- cryptography (RustCrypto / dalek, current generation) -----------------
+# All of these share rand_core 0.10 / digest 0.11; keep them on the same line.
+sha2 = "0.11.1"
+sha1 = "0.11"
+hmac = "0.13"
+hkdf = "0.13"
+chacha20poly1305 = { version = "0.11", features = ["zeroize"] }
+ed25519-dalek = { version = "3.0", features = ["rand_core", "zeroize", "serde"] }
+x25519-dalek = { version = "3.0", features = ["static_secrets", "zeroize", "serde"] }
+hpke = { version = "0.15.1", default-features = false, features = ["alloc", "getrandom", "x25519", "chacha", "hkdfsha2"] }
+argon2 = { version = "0.6", default-features = false, features = ["alloc", "zeroize"] }
+rand = "0.10.3"
+rand_core = "0.10.1"
+getrandom = { version = "0.4.3", features = ["sys_rng"] }
+zeroize = { version = "1.9", features = ["derive", "std"] }
+subtle = "2.6"
+secrecy = { version = "0.10.3", features = ["serde"] }
+p256 = { version = "0.14", features = ["ecdsa", "pem", "pkcs8"] }
+jsonwebtoken = { version = "11.1", default-features = false, features = ["rust_crypto", "use_pem"] }
+
+# ---- databases ----------------------------------------------------------------
+# rusqlite 0.39 (libsqlite3-sys 0.37) is the newest line that can share one dependency graph
+# with sqlx 0.9 (sqlx-sqlite requires libsqlite3-sys < 0.38; `links = "sqlite3"` allows one copy).
+rusqlite = { version = "0.39", features = ["bundled"] }
+tokio-postgres = { version = "0.7.18", features = ["with-serde_json-1", "with-chrono-0_4"] }
+tokio-postgres-rustls = { version = "0.14", features = ["aws-lc-rs"] }
+postgres-types = { version = "0.2.14", features = ["derive", "with-serde_json-1", "with-chrono-0_4"] }
+# For cloud reuse. TLS via rustls + aws-lc-rs (single provider workspace-wide).
+sqlx = { version = "0.9", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-aws-lc-rs", "chrono", "json", "macros", "migrate"] }
+
+# ---- DNS --------------------------------------------------------------------
+hickory-resolver = { version = "0.26.3", features = ["tokio", "system-config"] }
+
+# ---- CLI, OS integration ----------------------------------------------------
+clap = { version = "4.6.7", features = ["derive", "env"] }
+directories = "6.0"
+dirs = "7.0"
+keyring = "4.2"
+rpassword = "7.5"
+similar = "3.2"
+tempfile = "3.27"
+qrcode = { version = "0.14.1", default-features = false, features = ["svg"] }
+
+# ---- FFI ----------------------------------------------------------------------
+uniffi = { version = "0.32.2", features = ["tokio"] }
+
+[profile.release]
+lto = "thin"
+codegen-units = 4
+strip = "debuginfo"
+
+# Optimise the hot crypto dependencies even in dev/test builds so Argon2id with the real
+# contract parameters (64 MiB, t=3) and bulk AEAD stay fast in test suites.
+[profile.dev.package.argon2]
+opt-level = 3
+[profile.dev.package.blake2]
+opt-level = 3
+[profile.dev.package.chacha20]
+opt-level = 3
+[profile.dev.package.poly1305]
+opt-level = 3
+[profile.dev.package.curve25519-dalek]
+opt-level = 3
+[profile.dev.package.sha2]
+opt-level = 3

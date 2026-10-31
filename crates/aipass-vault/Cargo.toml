@@ -1,0 +1,45 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "aipass-vault"
+description = "AI Pass Vault Core: key hierarchy, entries, members, manifests, recovery, password generator, TOTP, import/export and pairing crypto."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[features]
+default = []
+# OS keychain SecretStore (macOS Keychain / Windows Credential Manager / Secret Service)
+# through the `keyring` crate (v1 API).
+os-keyring = ["dep:keyring"]
+
+[dependencies]
+aipass-types.workspace = true
+aipass-crypto.workspace = true
+aipass-storage.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+chrono.workspace = true
+zeroize.workspace = true
+url.workspace = true
+psl.workspace = true
+csv.workspace = true
+data-encoding.workspace = true
+hmac.workspace = true
+sha1.workspace = true
+sha2.workspace = true
+tracing.workspace = true
+async-trait.workspace = true
+tokio.workspace = true
+percent-encoding.workspace = true
+keyring = { workspace = true, optional = true }
+
+[dev-dependencies]
+tokio.workspace = true
+tempfile.workspace = true
+
+[lints]
+workspace = true

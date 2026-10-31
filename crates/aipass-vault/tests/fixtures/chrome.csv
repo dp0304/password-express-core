@@ -1,0 +1,6 @@
+name,url,username,password,note
+GitHub,https://github.com/login,octocat,gh-pass-1,
+Shop,https://www.shop.example.com/account,alice@example.com,shop-pw,"multi
+line note"
+NoPassword,https://nopw.example,bob,,
+Duplicate,https://shop.example.com/login,ALICE@example.com,other-pw,
