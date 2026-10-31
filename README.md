@@ -11,8 +11,8 @@
 数据格式和接口在 1.0 之前仍可能调整（变更会附带迁移说明与测试向量）。
 
 本目录是“核心开源”的那一部分：加密与存储核心、授权代理、执行器与连接器、MCP 桥、SDK、
-参考 CLI 和基础自托管服务。商业手机 / 桌面客户端、官方云服务控制台不在本目录中，
-也不应被称为“完整开源产品”。
+参考 CLI、基础自托管服务，以及跨平台桌面 App（`desktop/`）。商业手机 App、浏览器扩展、
+官方云服务与控制台、团队功能和官方维护的集成不在本目录中，本目录也不应被称为“完整开源产品”。
 
 ## 包含什么
 
@@ -21,6 +21,7 @@
 | `crates/` | Rust 工作区（14 个 crate，见下表） |
 | `sdk/typescript/`, `sdk/python/` | `@aipass/sdk` 与 `aipass-sdk`（由各自的构建步骤提供） |
 | `deploy/` | Docker / systemd / 示例（由自托管构建步骤提供） |
+| `desktop/` | 跨平台桌面 App（Tauri 2 + React，macOS / Windows / Linux）：内嵌授权代理 + 执行器（兼容连接）、AI 宿主接入向导、浏览器扩展原生通信程序 `aipass-nm-host`。`desktop/src-tauri` 是独立的 Cargo workspace（自带 `Cargo.lock`，已在本目录 `Cargo.toml` 中 `exclude`），通过相对路径依赖 `crates/*`；说明见 [`desktop/README.md`](desktop/README.md) |
 | `test-vectors/` | 跨语言测试向量：请求签名、JCS、审批摘要、HPKE、XChaCha20-Poly1305 |
 
 ### Crate 一览
@@ -92,6 +93,10 @@ cargo check --workspace
 cargo test -p aipass-crypto -p aipass-types -p aipass-storage
 # 重新生成测试向量（会覆盖 test-vectors/ 中由测试生成的文件）
 AIPASS_REGEN_VECTORS=1 cargo test -p aipass-crypto -p aipass-types
+
+# 桌面 App（Node 24 + pnpm；Tauri 2 的系统依赖见 desktop/README.md）
+cd desktop && pnpm install && pnpm build && pnpm test
+cd src-tauri && cargo test --workspace
 ```
 
 TLS 统一使用 rustls + aws-lc-rs 加密后端；请勿在任何 crate 中启用 `ring` 后端
@@ -128,14 +133,20 @@ Apache License 2.0，见 [`LICENSE`](LICENSE) 与 [`NOTICE`](NOTICE)。允许他
 
 The open-source core of **AI Pass** (working name): vault crypto and storage formats, the
 access broker, executor and connectors, MCP bridge, SDKs, reference CLI and a basic
-self-host node — licensed **Apache-2.0**. The commercial mobile/desktop apps and the official
-cloud console are *not* part of this directory.
+self-host node, plus the cross-platform desktop app (`desktop/`, Tauri 2 + React) — licensed
+**Apache-2.0**. The mobile apps, the browser extension, the official cloud services and console,
+team features and maintained integrations are commercial and *not* part of this directory.
 
 - **Status:** under development, **not independently audited**.
 - **Crates:** see the table above (`aipass-types`, `aipass-crypto`, `aipass-vault`,
   `aipass-storage`, `aipass-sync`, `aipass-sync-server`, `aipass-broker`, `aipass-executor`,
   `aipass-client`, `aipass-mcp`, `aipass-hostconfig`, `aipass-node`, `aipass-cli`,
   `aipass-ffi`). Interfaces are specified in `docs/spec/CONTRACTS.md`.
+- **Desktop app:** `desktop/` — Tauri 2 + React for macOS / Windows / Linux with an embedded
+  broker + executor (protection level *compatible*), the AI-host wizard and the browser
+  native-messaging host `aipass-nm-host`. `desktop/src-tauri` is a separate Cargo workspace
+  (own `Cargo.lock`, excluded from `Cargo.toml` here) that depends on `crates/*` by path; see
+  [`desktop/README.md`](desktop/README.md).
 - **Test vectors:** `test-vectors/` (request signing, JCS, approval digest, HPKE,
   XChaCha20-Poly1305) — every implementation must reproduce them.
 - **Build:** `cargo check --workspace`; tests per crate with `cargo test -p <crate>`.

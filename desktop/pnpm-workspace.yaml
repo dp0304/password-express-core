@@ -1,0 +1,7 @@
+# SPDX-License-Identifier: Apache-2.0
+# Standalone pnpm root for the desktop app (keeps pnpm from walking up the monorepo).
+packages:
+  - "."
+allowBuilds:
+  esbuild: true
+  "@tauri-apps/cli": true

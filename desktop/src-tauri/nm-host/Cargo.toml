@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "aipass-nm-host"
+version = "0.1.0"
+edition = "2024"
+description = "AI 通行证 native-messaging host (com.aipass.native): Chrome framing ↔ desktop IPC"
+license = "Apache-2.0"
+publish = false
+
+[lib]
+name = "aipass_nm"
+path = "src/lib.rs"
+
+[[bin]]
+name = "aipass-nm-host"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1.54", features = ["rt", "macros", "io-util", "io-std", "net", "time", "process"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+subtle = "2.6"
+hex = "0.4.3"
+dirs = "7.0"

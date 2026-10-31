@@ -1,0 +1,71 @@
+# SPDX-License-Identifier: Apache-2.0
+[package]
+name = "aipass-desktop"
+version = "0.1.0"
+edition = "2024"
+description = "AI 通行证 (AI Pass) desktop app — Tauri 2 shell around the open-source core"
+license = "Apache-2.0"
+publish = false
+default-run = "aipass-desktop"
+
+[workspace]
+members = [".", "nm-host"]
+resolver = "3"
+
+[lib]
+name = "aipass_desktop_lib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "aipass-desktop"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2.7.4", features = [] }
+
+[dependencies]
+tauri = { version = "2.12.5", features = [] }
+aipass-nm = { path = "nm-host", package = "aipass-nm-host" }
+aipass-types = { path = "../../crates/aipass-types" }
+aipass-crypto = { path = "../../crates/aipass-crypto" }
+aipass-vault = { path = "../../crates/aipass-vault" }
+aipass-storage = { path = "../../crates/aipass-storage" }
+aipass-sync = { path = "../../crates/aipass-sync" }
+aipass-broker = { path = "../../crates/aipass-broker" }
+aipass-executor = { path = "../../crates/aipass-executor" }
+aipass-client = { path = "../../crates/aipass-client" }
+aipass-hostconfig = { path = "../../crates/aipass-hostconfig" }
+aipass-mcp = { path = "../../crates/aipass-mcp" }
+tokio = { version = "1.54", features = ["full"] }
+tokio-util = { version = "0.7.20", features = ["rt"] }
+async-trait = "0.1.92"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+thiserror = "2.0.21"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter", "fmt"] }
+chrono = { version = "0.4.45", default-features = false, features = ["std", "clock", "serde"] }
+url = { version = "2.5.8", features = ["serde"] }
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls", "json"] }
+zeroize = { version = "1.9", features = ["derive", "std"] }
+subtle = "2.6"
+hex = "0.4.3"
+dirs = "7.0"
+qrcode = { version = "0.14.1", default-features = false, features = ["svg"] }
+arboard = { version = "3.7", default-features = false }
+tauri-plugin-dialog = "2.8.4"
+
+[dev-dependencies]
+tempfile = "3.27"
+aipass-sync-server = { path = "../../crates/aipass-sync-server" }
+axum = "0.8.9"
+
+[profile.dev.package."*"]
+opt-level = 1
+
+[profile.dev.package.aipass-crypto]
+opt-level = 3
+[profile.dev.package.argon2]
+opt-level = 3
+[profile.dev.package.blake2]
+opt-level = 3

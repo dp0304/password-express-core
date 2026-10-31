@@ -36,9 +36,10 @@ passw/
 │   ├── sdk/typescript/        @aipass/sdk
 │   ├── sdk/python/            aipass (PyPI name aipass-sdk)
 │   ├── deploy/                docker, systemd, examples (lure-store demo DB)
+│   ├── desktop/               Tauri 2 (cross-platform: macOS / Windows / Linux) + React; embeds broker+executor; native-messaging host
+│   │                          (own Cargo workspace in desktop/src-tauri, excluded from open-source/Cargo.toml)
 │   └── test-vectors/          JSON test vectors (crypto, signing, digest, vault)
 ├── clients/                               Proprietary — 商业客户端
-│   ├── desktop/               Tauri 2 (cross-platform: macOS / Windows / Linux) + React; embeds broker+executor; native-messaging host
 │   ├── ios/                   SwiftUI app + Credential Provider Extension + AIPassKit Swift package
 │   ├── android/               Kotlin / Compose app + AutofillService + CredentialProviderService
 │   └── browser-extension/     Chromium MV3 extension (TypeScript)
@@ -53,9 +54,10 @@ Ownership rule: an agent writes only inside the directories it owns. Shared file
 the foundation step; later agents may *append* a dependency line to their own crate's
 `Cargo.toml` but must not reorganise the workspace.
 
-License header: every source file under `open-source/` starts with
-`// SPDX-License-Identifier: Apache-2.0` (or the language's comment equivalent). Files under
-`clients/` and `cloud/` use `// Proprietary — © AI Pass. All rights reserved.`
+License header: every source file under `open-source/` (including the desktop app in
+`open-source/desktop/`) starts with `// SPDX-License-Identifier: Apache-2.0` (or the language's
+comment equivalent). Files under `clients/` and `cloud/` use
+`// Proprietary — © AI Pass. All rights reserved.`
 
 ---
 
@@ -622,7 +624,7 @@ Environment notes for implementers: Rust nightly 1.97 (aarch64-apple-darwin only
 
 ## 16. Changes since v1 (consolidated, accepted deviations)
 
-This section collects every contract deviation that the implementing agents reported and that integration and security review accepted. Nothing in §0–§15 above was edited, apart from the §13 entries already marked **v1.1**. Where this section and an earlier section disagree, **this section describes the build**. Each component README keeps its own "Contract deviations" list. Kinds: **A** = additive (old readers unaffected); **S** = stricter than v1 (valid v1 traffic may now be refused); **C** = clarification of something v1 left open; **D** = a real deviation from the v1 text.
+This section collects every contract deviation that the implementing agents reported and that integration and security review accepted. Nothing in §0–§15 above was edited, apart from the §13 entries already marked **v1.1** and the §0 layout / licence lines (v1.1: the desktop app moved from `clients/desktop` to `open-source/desktop` and is Apache-2.0). Where this section and an earlier section disagree, **this section describes the build**. Each component README keeps its own "Contract deviations" list. Kinds: **A** = additive (old readers unaffected); **S** = stricter than v1 (valid v1 traffic may now be refused); **C** = clarification of something v1 left open; **D** = a real deviation from the v1 text.
 
 ### 16.1 Workspace & conventions (§0, §1)
 - **D** `ed25519-dalek` 3.x (with `x25519-dalek` 3, `hpke` 0.15, `sha2` 0.11, `chacha20poly1305` 0.11), not 2.x. There is one TLS provider for the whole workspace, rustls with aws-lc-rs, so `ring` is not compiled; sqlx uses feature `tls-rustls-aws-lc-rs`. `rusqlite` is pinned to 0.39 so that its `libsqlite3-sys` can link alongside sqlx 0.9.

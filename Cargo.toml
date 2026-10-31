@@ -28,6 +28,8 @@ members = [
     "crates/aipass-cli",
     "crates/aipass-ffi",
 ]
+# The desktop app (desktop/src-tauri) is its own Cargo workspace with its own Cargo.lock.
+exclude = ["desktop"]
 
 [workspace.package]
 version = "0.1.0"
