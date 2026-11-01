@@ -1,11 +1,13 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # AI 通行证（AI Pass）开源核心
 
+**简体中文** | [English](README.en.md)
+
 > 让人少操心每一个密码，让 AI 在授权范围内使用账号。
 >
 > *AI Pass* is a working name. This directory is the **open-source core** (Apache-2.0) of a
 > password / API-key manager that lets AI agents use accounts within user-approved scopes
-> without ever seeing raw credentials. An English summary is at the end of this file.
+> without ever seeing raw credentials. Read the full [English README](README.en.md).
 
 **状态：开发中，尚未经过独立安全审计。** 请勿把本仓库的任何部分当作已审计的安全产品使用；
 数据格式和接口在 1.0 之前仍可能调整（变更会附带迁移说明与测试向量）。

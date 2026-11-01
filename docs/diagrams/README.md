@@ -4,11 +4,14 @@
 生成日期：2026-11-01（Asia/Shanghai）。使用内置 **imagegen** 工具，分别生成软件架构与授权工作流程位图，
 再通过 imagegen 编辑校正连接线。图片尺寸均为 1672 × 941，样式取自桌面 App 的深色界面配色。
 原始生成与最终编辑的完整提示词见 [`prompts.md`](prompts.md)。
+英文版本使用 imagegen 在原图上替换全部文字，保留组件和箭头关系；本地化提示词见 [`prompts.en.md`](prompts.en.md)。
 
 | 文件 | 内容 |
 | --- | --- |
 | [`architecture.png`](architecture.png) | 开源组件、逻辑数据通道、桌面与自托管两种部署方式 |
 | [`authorization-workflow.png`](authorization-workflow.png) | 请求校验、已有授权 / 签名规则 / 人工审批分支、执行与结果过滤 |
+| [`architecture.en.png`](architecture.en.png) | 软件架构图英文版 |
+| [`authorization-workflow.en.png`](authorization-workflow.en.png) | 授权工作流程图英文版 |
 
 架构图按逻辑通道展示：可信客户端的 HPKE 凭证封装经 Broker 转交 Executor；
 执行结果沿 Executor → Broker → MCP / SDK → AI 宿主返回。
@@ -32,3 +35,5 @@
 
 Generated with the built-in imagegen tool. The diagrams describe the open-source components and current
 authorization flow; full prompts and source references are retained here for review and future updates.
+The English editions preserve the same topology and use English labels throughout. Their complete localization
+prompts are recorded in [`prompts.en.md`](prompts.en.md).
