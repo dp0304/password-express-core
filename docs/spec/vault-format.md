@@ -4,7 +4,7 @@
 Status: implemented by `open-source/crates/aipass-vault` (Vault Core) and
 `open-source/crates/aipass-sync` (sync engine). Refines CONTRACTS §2, §3.2, §5 and §7.
 Test vectors: `open-source/test-vectors/vault/` (fixed seeds; cross-checked with Python
-`cryptography`, libsodium/PyNaCl and argon2-cffi). **Not yet independently audited.**
+`cryptography`, libsodium/PyNaCl and argon2-cffi).
 
 中文摘要：存储里只有密文、签名清单和成员记录。每个条目版本用独立的数据密钥（DEK）加密，DEK 由账号库主密钥（VMK）封装，VMK 分别用 HPKE 封装给每台可信设备。清单是唯一的提交点，采用"只能新建"的写入；每台设备保存已验证的检查点以识别回滚。恢复密钥额外派生一个"恢复成员"身份，使密钥轮换之后恢复仍然可用，而设备上从不保存恢复密钥本身。
 

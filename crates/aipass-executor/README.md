@@ -1,7 +1,7 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 # aipass-executor
 
-**中文摘要**：AI 通行证的执行器与连接器。它实现 `aipass_types::exec::ExecutorBackend`，凭证只在执行器内存中按授权（grant）保存、到期或撤销即清零；提供 `postgres.query_view`（只读允许视图、参数化查询）、GitHub 指定仓库的五个读取操作、声明式 `http_api.call`，以及统一的出站防护（只允许 HTTPS、固定来源与已校验 IP、拒绝内网/元数据地址、不跟随重定向、超时与大小上限）和输出过滤（字段白名单 + 密钥检测 + 已安装凭证精确匹配）。实验性功能（`experimental` 特性，默认关闭）：PostgreSQL 密码轮换、临时数据库角色租约、通过网站适配器创建账号（仅附带的演示网站）。本组件尚未经过独立安全审计。
+AI 通行证的执行器与连接器，实现 `aipass_types::exec::ExecutorBackend`。凭证按授权（grant）保存在执行器内存中，到期或撤销后清零。支持 `postgres.query_view`（只读视图、参数化查询）、GitHub 指定仓库的五个读取操作和声明式 `http_api.call`，并提供出站防护与输出过滤。PostgreSQL 密码轮换、临时数据库角色租约和演示网站账号创建为实验性功能，需启用默认关闭的 `experimental` 特性。
 
 ---
 
@@ -200,7 +200,7 @@ let backend: Arc<dyn ExecutorBackend> = exec.clone();
 
 ## Limitations
 
-* Not independently audited. Detection-based redaction is best effort.
+* Detection-based redaction is best effort.
 * An executor embedded in the desktop app is `compatible` (兼容连接): it shares the user
   environment and cannot resist same-user code, debuggers or memory inspection (§9.3).
 * `sslmode=prefer|require` without `ssl_root_cert` do not authenticate the server (libpq

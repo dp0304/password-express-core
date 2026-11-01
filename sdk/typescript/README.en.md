@@ -5,9 +5,10 @@
 
 Lets custom agents, sites and workflows use accounts and data through **AI Pass (AI 通行证)** within the scope the user approved — **without ever receiving raw passwords, API keys, tokens or connection strings**. The SDK discovers resources, requests structured operations, waits for the user's approval on their phone or trusted client, reads the results the policy allows, cancels tasks, and ships tool definitions plus a dispatcher for model function calling (design doc §3.1, §7.6, §12).
 
-> Status: V1 open-source component, **not yet independently audited**. The OpenAI / Anthropic tool formats follow those providers' public documentation ("standard protocol"); they have not been validated end-to-end against live model APIs in this build.
+OpenAI / Anthropic tool formats follow their public protocols. End-to-end testing against
+live model APIs is pending.
 
-## Security model (what it does and does not promise)
+## Security model
 
 - The SDK holds only **this connection's own identity** (an Ed25519 connection key or an `aipc_` / `aipa_` token). It never touches business credentials; those are used inside the executor only.
 - Connection keys come from the OS CSPRNG; the private key lives only inside a `node:crypto` `KeyObject` and is never printed by `toString` / `toJSON` / `util.inspect`. Key files are written 0600 (directory 0700) and group/world-readable key files are refused on load.

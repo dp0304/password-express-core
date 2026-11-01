@@ -4,14 +4,13 @@
 授权代理（Access Broker）：决定一个 AI 连接能否执行某项操作，并如实记录发生了什么——身份、
 签名策略、授权（grant）、审批、操作状态机、额度、三级撤销、哈希链审计和 HTTP API。代理本身
 从不接触凭证：执行通过 `ExecutorBackend` trait 完成，凭证只以密封信封的形式经过代理。
-**尚未经过独立安全审计。**
 
 The Access Broker decides whether an AI connection may do something and records what
 happened: identity, signed policies, grants, approvals, the operation state machine,
 budgets, three-level revocation, the hash-chained audit log and the HTTP API (CONTRACTS §6,
 §7; design doc §5.3, §7.3–7.6, §8, §9.2–9.3, §11.4–11.5, §12). It never sees credentials:
 execution goes through `aipass_types::exec::ExecutorBackend`, and credentials pass through
-only as HPKE envelopes sealed to the executor. **Not yet independently audited.**
+only as HPKE envelopes sealed to the executor.
 
 ## Architecture
 

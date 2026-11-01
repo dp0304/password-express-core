@@ -103,7 +103,7 @@ Tests:
 * HttpSyncStore and RelayClient are tested end-to-end against the real routers in
   `crates/aipass-sync-server/tests/`.
 
-## Limitations (honest)
+## Limitations
 
 * **No real S3-compatible service was exercised in this environment** (no network
   credentials, no MinIO/Docker). S3 behaviour is verified against the AWS published SigV4
@@ -116,7 +116,6 @@ Tests:
   not meant for millions of objects). On filesystems without hard links the create-only
   fallback can briefly expose an empty file to concurrent readers.
 * reqwest honours `HTTP(S)_PROXY` environment variables for storage traffic.
-* This code has not had an independent security audit.
 
 ## Contract deviations
 

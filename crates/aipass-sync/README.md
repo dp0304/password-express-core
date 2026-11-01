@@ -4,7 +4,7 @@
 客户端同步引擎与 `VaultClient` 门面：拉取并逐条验证签名清单链，检测已知检查点的回滚，
 "只能新建"的提交与重放合并，三方合并与冲突暂停自动使用，删除标记，离线 90 天规则，
 加密的本地待同步队列，成员撤销与密钥轮换。CLI、桌面端和 FFI 都通过 `VaultClient` 使用账号库，
-界面永远不接触主密钥。**尚未经过独立安全审计。**
+界面不接触主密钥。
 
 Client sync engine (CONTRACTS §3.2) and the `VaultClient` facade used by the CLI, the
 desktop app and the FFI (CONTRACTS §12). Format: [`docs/spec/vault-format.md`](../../docs/spec/vault-format.md).
@@ -84,7 +84,6 @@ in-memory relay):
 
 ## Limitations
 
-* Not independently audited.
 * A brand-new device verifies the full manifest history from `vault.json` (no signed
   snapshot compaction yet) and cannot detect a storage rolled back *as a whole* without an
   independent checkpoint (design doc §10.4; pairing passes and checks the trusted device's

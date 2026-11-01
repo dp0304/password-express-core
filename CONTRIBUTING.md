@@ -33,7 +33,7 @@ All contributions are licensed under Apache-2.0. Every commit needs a DCO
 - 不允许“超时即批准”、“缺省放行”之类的失败开放（fail-open）逻辑。
 - 文案遵循诚实原则：不宣称“已验证 / verified”兼容、“首个”、远程网关端到端不可见、
   托管执行对服务方不可见、任意网站自动注册、保证轮换、即时撤销或无恢复材料的恢复；
-  V1.1 能力标注“实验性 / experimental”；说明尚未经过独立审计。
+  V1.1 能力标注“实验性 / experimental”。安全审计状态统一维护在 `SECURITY.md`。
 - UI 与用户可见文案：简体中文为默认且完整，英文完整。
 
 Read `docs/spec/CONTRACTS.md` first; keep test vectors reproducible; mature crypto

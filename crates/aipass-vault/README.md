@@ -3,7 +3,7 @@
 
 账号库核心：密钥层级、条目加密、成员记录、签名清单、恢复密钥与恢复包、密码生成器、TOTP、
 CSV 导入与导出、设备配对状态机、审批签名。所有密码学原语来自 `aipass-crypto`（成熟库，
-无自制算法），所有线上格式来自 `aipass-types`。**尚未经过独立安全审计。**
+无自制算法），所有线上格式来自 `aipass-types`。
 
 Vault Core of AI Pass (CONTRACTS §2, §4, §5, §7; design doc §6, §9.4, §9.5, §10). The exact
 on-storage format is specified in [`docs/spec/vault-format.md`](../../docs/spec/vault-format.md).
@@ -68,7 +68,6 @@ over JCS, Crockford), PyNaCl/libsodium (XChaCha20-Poly1305) and argon2-cffi.
 
 ## Limitations
 
-* Not independently audited.
 * `require_user_presence` is enforced only by native secret stores (iOS / Android through
   FFI). `FileSecretStore` uses its passphrase as the presence check; `OsKeyringStore` (keyring
   v1 API) cannot request biometrics and is not described as hardware-protected. The OS

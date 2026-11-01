@@ -3,7 +3,7 @@
 
 Shared models and protocol rules of AI Pass — the Rust implementation of the binding shapes
 in `docs/spec/CONTRACTS.md`. Every digest and signature in Rust (broker, CLI, desktop, FFI)
-goes through this crate. **Not yet independently audited.**
+goes through this crate.
 
 | module | contract | key items |
 | --- | --- | --- |

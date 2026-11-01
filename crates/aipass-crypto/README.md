@@ -2,7 +2,7 @@
 # aipass-crypto
 
 Cryptographic primitives for AI Pass (CONTRACTS §2.1, design doc §9.4). A thin layer over
-mature libraries — no home-made algorithms. **Not yet independently audited.**
+mature cryptographic libraries.
 
 | need | API | library |
 | --- | --- | --- |

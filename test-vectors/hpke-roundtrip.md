@@ -1,5 +1,5 @@
 <!-- SPDX-License-Identifier: Apache-2.0 -->
-# HPKE vectors and roundtrip notes
+# HPKE test vectors
 
 AI Pass seals data to a device or executor public key with **HPKE (RFC 9180) base mode**,
 suite **DHKEM(X25519, HKDF-SHA256) / HKDF-SHA256 / ChaCha20-Poly1305** (`kem_id=0x0020`,
@@ -30,5 +30,3 @@ non-deterministic. Correctness is pinned instead by:
 | VMK wrap to a member device | `aipass/v1/vmk-wrap` | `aipass:v1:vmk:{vault_id}:{device_id}:{key_epoch}` |
 | credential envelope to an executor | `aipass/v1/credential` | `JCS({approval_request_id, digest, executor_id})` |
 | relay envelope | `aipass/v1/relay` | `JCS({v, from, to, type, created_at})` |
-
-Status: not independently audited.

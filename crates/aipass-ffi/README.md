@@ -9,12 +9,11 @@ The iOS / Android apps use this crate to reach the shared Rust core (vault, sync
 approvals). Bindings are generated with uniffi 0.32 proc-macros: Swift module `AIPassCore`,
 Kotlin package `com.aipass.core` (CONTRACTS §12).
 
-> 安全提示 / Security note: not independently audited. Only `reveal_secret`,
-> `autofill_credential`, `generate_password`, `totp_now` and the one-time recovery key of
-> `create_vault` / `replace_recovery_key` return secret material. **The native side must
-> require biometrics / device passcode right before `reveal_secret` and
-> `autofill_credential`**, must never hand their results to an AI tool, a log, analytics
-> or a WebView, and should drop them from memory as soon as they are used.
+Only `reveal_secret`, `autofill_credential`, `generate_password`, `totp_now` and the one-time
+recovery key of `create_vault` / `replace_recovery_key` return secret material. The native
+app must require biometrics or the device passcode immediately before `reveal_secret` and
+`autofill_credential`. Keep their results out of AI tools, logs, analytics and WebViews,
+and drop them from memory after use.
 
 ## Architecture
 

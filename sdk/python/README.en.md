@@ -5,7 +5,8 @@
 
 Lets custom agents and workflows use accounts and data through **AI Pass (AI 通行证)** within the scope the user approved — **without ever receiving raw passwords, API keys, tokens or connection strings**. Import name `aipass` (PyPI distribution `aipass-sdk`). It provides a sync `Client` and an async `AsyncClient`: discover resources, request structured operations, wait for the user's approval on their phone or trusted client, read the results the policy allows, cancel tasks, plus tool definitions and a dispatcher for model function calling (design doc §3.1, §7.6, §12).
 
-> Status: V1 open-source component, **not yet independently audited**. OpenAI / Anthropic tool formats follow the providers' public documentation ("standard protocol"); they have not been validated end-to-end against live model APIs in this build.
+OpenAI / Anthropic tool formats follow their public protocols. End-to-end testing against
+live model APIs is pending.
 
 ## Security model
 

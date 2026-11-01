@@ -4,19 +4,15 @@
 **简体中文** | [English](README.en.md)
 
 > 让人少操心每一个密码，让 AI 在授权范围内使用账号。
->
-> *AI Pass* is a working name. This directory is the **open-source core** (Apache-2.0) of a
-> password / API-key manager that lets AI agents use accounts within user-approved scopes
-> without ever seeing raw credentials. Read the full [English README](README.en.md).
 
-**状态：开发中，尚未经过独立安全审计。** 请勿把本仓库的任何部分当作已审计的安全产品使用；
-数据格式和接口在 1.0 之前仍可能调整（变更会附带迁移说明与测试向量）。
+AI 通行证管理密码、API Key 和数据库凭据。AI 通过授权代理调用账号和服务，工具输出不包含原始凭据。
 
-本目录是“核心开源”的那一部分：加密与存储核心、授权代理、执行器与连接器、MCP 桥、SDK、
-参考 CLI、基础自托管服务，以及跨平台桌面 App（`desktop/`）。商业手机 App、浏览器扩展、
-官方云服务与控制台、团队功能和官方维护的集成不在本目录中，本目录也不应被称为“完整开源产品”。
+本仓库以 Apache-2.0 许可提供加密与存储核心、授权代理、执行器、连接器、MCP 桥、SDK、CLI、
+自托管服务和跨平台桌面 App。手机 App、浏览器扩展、官方云服务与控制台、团队功能和官方维护的集成另行提供。
 
-## 软件架构 / Architecture
+项目仍在开发中，1.0 之前的数据格式和接口可能调整。安全信息见 [SECURITY.md](SECURITY.md)。
+
+## 软件架构
 
 AI 宿主通过 MCP 桥或 SDK 发送结构化请求；授权代理（Broker）校验身份、资源范围与额度，
 由执行器（Executor）通过连接器调用 PostgreSQL、GitHub 或已配置的 HTTP API。
@@ -24,46 +20,43 @@ AI 宿主通过 MCP 桥或 SDK 发送结构化请求；授权代理（Broker）�
 
 ![AI 通行证开源核心架构：AI 宿主、MCP/SDK、Broker、Executor、可信账号库与密文存储](docs/diagrams/architecture.png)
 
-桌面 App 将 Vault、Broker 与 Executor 放在同一 Tauri 进程内，本机执行器的保护等级为**兼容连接**。
+桌面 App 将 Vault、Broker 与 Executor 放在同一 Tauri 进程内。本机执行器采用**兼容连接**，与当前用户共享运行环境。
 也可部署 `aipass-node`，提供 Broker、Executor、密文同步、中继与远程 MCP，由配对的可信客户端审批。
-图中为逻辑通道：HPKE 凭证封装经 Broker 转交执行器，过滤结果经 Broker、MCP / SDK 返回请求方。
 
-## 工作原理 / How it works
+## 工作原理
 
 ![AI 操作授权流程：请求校验、授权复用或用户审批、凭证封装、受限执行与结果过滤](docs/diagrams/authorization-workflow.png)
 
 1. **请求校验**：Broker 校验连接身份、项目和资源范围、操作参数及执行器状态。
 2. **授权判定**：已有有效授权可在范围、有效期和剩余额度内复用；签名规则仅能自动批准其允许的测试环境只读操作，其余请求进入审批。
 3. **可信审批**：用户核对资源、权限、时长与额度；桌面审批需重新验证解锁密码。客户端签名决策并封装凭证，Broker 验签、核对请求摘要并创建授权。拒绝或超时均不执行。
-4. **执行与返回**：执行器按授权临时保管凭证、调用连接器，结果经字段白名单与秘密检测后返回请求方，并记录审计。到期或撤销后拒绝后续使用，会话和上游撤销按实际能力报告。
+4. **执行与返回**：执行器按授权调用服务，结果经过字段过滤和秘密检测后返回，并记录审计。授权到期或撤销后，停止后续调用。
 
-以上两图使用 imagegen 生成，组件关系与分支已按当前代码核对；[图示说明、代码依据和完整提示词](docs/diagrams/README.md)随仓库保存。
+会话终止与上游撤销的支持范围见[执行器文档](crates/aipass-executor/README.md)。
 
-## 桌面 App 截图 / Desktop screenshots
+## 桌面 App
 
-以下截图使用本次编译的桌面前端，连接真实的本地 Rust 核心，在浏览器中采集。
-账号库、账号与资源均为独立的虚构演示数据，密码保持隐藏。原生桌面 App 默认启用防截屏。
-采集环境与说明见 [`docs/screenshots/README.md`](docs/screenshots/README.md)。
+支持 macOS、Windows 和 Linux。截图中的账号与资源为演示数据。
 
-### 账号库 / Vault
+### 账号库
 
-按项目管理登录账号、API Key、数据库凭据和安全备注，查看账号详情与掩码密码。
+按项目管理登录账号、API Key、数据库凭据和安全备注。
 
 ![账号库：演示项目中的账号列表与隐藏密码的账号详情](docs/screenshots/02-vault.jpg)
 
-### AI 连接 / AI connections
+### AI 连接
 
-检测本机 AI 工具，展示标准协议接入方式与用户 / 项目配置范围。
+检测本机 AI 工具，配置用户或项目的接入方式。
 
-![AI 连接：Codex、Claude Code、Cursor 等工具的实际检测结果](docs/screenshots/03-ai-connections.jpg)
+![AI 连接：Codex、Claude Code、Cursor 等工具的接入配置](docs/screenshots/03-ai-connections.jpg)
 
-### 执行设备 / Executors
+### 执行设备
 
-查看本机执行设备的运行状态、保护等级，以及登记的 HTTP API / PostgreSQL 演示资源。
+查看执行设备状态、保护等级和已登记的服务资源。
 
 ![执行设备：本机兼容连接与测试环境资源](docs/screenshots/04-executors.jpg)
 
-### 总览 / Overview
+### 总览
 
 汇总账号库、同步、本机执行设备状态和需要处理的提醒。
 
@@ -74,9 +67,9 @@ AI 宿主通过 MCP 桥或 SDK 发送结构化请求；授权代理（Broker）�
 | 目录 | 内容 |
 | --- | --- |
 | `crates/` | Rust 工作区（14 个 crate，见下表） |
-| `sdk/typescript/`, `sdk/python/` | `@aipass/sdk` 与 `aipass-sdk`（由各自的构建步骤提供） |
-| `deploy/` | Docker / systemd / 示例（由自托管构建步骤提供） |
-| `desktop/` | 跨平台桌面 App（Tauri 2 + React，macOS / Windows / Linux）：内嵌授权代理 + 执行器（兼容连接）、AI 宿主接入向导、浏览器扩展原生通信程序 `aipass-nm-host`。`desktop/src-tauri` 是独立的 Cargo workspace（自带 `Cargo.lock`，已在本目录 `Cargo.toml` 中 `exclude`），通过相对路径依赖 `crates/*`；说明见 [`desktop/README.md`](desktop/README.md) |
+| `sdk/typescript/`, `sdk/python/` | TypeScript SDK `@aipass/sdk` 与 Python SDK `aipass-sdk` |
+| `deploy/` | Docker、systemd 配置与自托管示例 |
+| `desktop/` | Tauri 2 + React 桌面 App，内置授权代理、执行器、AI 接入向导和浏览器原生通信程序。构建方式见 [桌面端文档](desktop/README.md) |
 | `test-vectors/` | 跨语言测试向量：请求签名、JCS、审批摘要、HPKE、XChaCha20-Poly1305 |
 
 ### Crate 一览
@@ -93,14 +86,14 @@ AI 宿主通过 MCP 桥或 SDK 发送结构化请求；授权代理（Broker）�
 | `aipass-executor` | 执行器与连接器（postgres、github、http_api）、出站防护、输出过滤 |
 | `aipass-client` | 授权代理 API 的 Rust 客户端（签名，UDS + TCP） |
 | `aipass-mcp` | MCP 桥（stdio + Streamable HTTP），二进制 `aipass-mcp` |
-| `aipass-hostconfig` | AI 宿主配置向导（Codex、Claude Code、Cursor 等，均为“标准协议可接入”） |
+| `aipass-hostconfig` | AI 宿主配置向导（Codex、Claude Code、Cursor 等，按标准协议接入） |
 | `aipass-node` | 自托管节点，二进制 `aipass-node`（授权代理 + 执行器 + 同步 + 中继 + 远程 MCP） |
 | `aipass-cli` | 参考 CLI / 可信客户端，二进制 `aipass` |
 | `aipass-ffi` | iOS / Android 的 uniffi 绑定（Swift 模块 `AIPassCore`，Kotlin 包 `com.aipass.core`） |
 
-各 crate 的接口约定见仓库根目录 `docs/spec/CONTRACTS.md`。
+各 crate 的接口约定见 [CONTRACTS.md](docs/spec/CONTRACTS.md)。
 
-## 安全设计要点
+## 安全设计
 
 - 只使用成熟的密码学库，不自行设计算法；所有随机数来自操作系统 CSPRNG。
 - 原始密码、API Key、刷新令牌和私钥不进入 AI 工具输出、日志、错误信息、调试输出或遥测；
@@ -109,30 +102,29 @@ AI 宿主通过 MCP 桥或 SDK 发送结构化请求；授权代理（Broker）�
 - 审批绑定规范化摘要；审批超时一律按失败处理，**绝不**因超时自动批准。
 - 存储服务只保存密文与签名清单；ETag 仅用于并发控制，不替代签名与完整性校验。
 
-## 快速开始 / Quick start
+## 快速开始
 
-完整的端到端演示（临时 PostgreSQL + 自托管节点 + CLI 作为可信设备 + MCP 桥接）：
-A full end-to-end run (temporary PostgreSQL, self-host node, CLI as the trusted device, MCP bridge):
+运行完整演示，启动临时 PostgreSQL、自托管节点、CLI 可信客户端与 MCP 桥：
 
 ```bash
-# 在本仓库根目录运行 / run from this repository's root
-tests/e2e/run.sh            # 需要 Homebrew PostgreSQL 17 / needs PostgreSQL 17 binaries
+# 在本仓库根目录运行，需要 Homebrew PostgreSQL 17
+tests/e2e/run.sh
 ```
 
-手动步骤 / Manual steps（详见 / details: [deploy/README.md](deploy/README.md)）：
+也可以手动配置，完整步骤见[部署文档](deploy/README.md)。将示例 ID 和配对链接替换为运行时的值。
 
 ```bash
 cargo build -p aipass-node -p aipass-cli -p aipass-mcp
 export PATH="$PWD/target/debug:$PATH"
 aipass-node -c node.toml init --name my-node --data-dir ./node-data
 aipass-node -c node.toml run &                      # broker + executor + sync + relay + /mcp
-aipass vault init --device-name laptop              # 可信设备上的保管库 / vault on the trusted device
+aipass vault init --device-name laptop              # 在可信设备上创建账号库
 aipass item add --kind database --title "Lure DB" --username lure_readonly --secret-prompt \
     --db-host 127.0.0.1 --db-port 5432 --db-name lure --db-sslmode require
-aipass-node -c node.toml pair                       # 显示配对链接 / shows the pairing link
-aipass device pair --uri 'aipass://pair?…'          # 核对 6 位码 / compare the 6-digit code
+aipass-node -c node.toml pair                       # 显示配对链接
+aipass device pair --uri 'aipass://pair?…'          # 核对 6 位码
 aipass resource add --alias lure-db --connector postgres --project lure-store \
-    --entry ent_… --config lure-db.json             # 只发送条目引用 / only the entry id is sent
+    --entry ent_… --config lure-db.json             # 发送条目引用
 aipass-mcp pair --host codex --name my-agent --broker http://127.0.0.1:7878 --configure
 aipass connections list && aipass connections approve conn_…
 aipass approvals list && aipass approvals approve apr_…
@@ -158,7 +150,7 @@ cd src-tauri && cargo test --workspace
 TLS 统一使用 rustls + aws-lc-rs 加密后端；请勿在任何 crate 中启用 `ring` 后端
 （同时编译两个后端会使 `rustls::ClientConfig::builder()` 在运行时 panic）。
 
-## 工作区依赖说明 / Workspace dependency notes
+## 依赖
 
 `[workspace.dependencies]` 使用 2026 年 10 月时互相兼容的当前版本：RustCrypto / dalek 新一代
 （`sha2 0.11`、`hmac 0.13`、`hkdf 0.13`、`chacha20poly1305 0.11`、`ed25519-dalek 3`、
@@ -166,44 +158,17 @@ TLS 统一使用 rustls + aws-lc-rs 加密后端；请勿在任何 crate 中启�
 `tokio 1.54`、`axum 0.8.9`、`tower-http 0.7`、`reqwest 0.13`（`rustls`，无 OpenSSL）、`rusqlite 0.39`（bundled）、`tokio-postgres 0.7.18`、`sqlx 0.9`、`uniffi 0.32` 等。新增依赖请优先写
 `dep.workspace = true`。
 
-### Contract deviations
+### 版本约束
 
 - `sqlx` 启用 `tls-rustls-aws-lc-rs` 而不是 `tls-rustls`（在 sqlx 0.9 中后者等于 ring 后端），
   以保证整个工作区只编译一个 rustls 加密后端。功能等价。
 - `rusqlite` 固定在 0.39（而非最新的 0.41）：0.39 依赖 `libsqlite3-sys 0.37`，是唯一能与
   `sqlx 0.9`（要求 `libsqlite3-sys < 0.38`）共存于同一依赖图的版本线（`links = "sqlite3"`
-  只允许一份）。已用一个依赖全部 72 个工作区依赖的临时 crate 验证可以同时解析和编译。
+  只允许一份）。
 - 其余 crate 级别的说明见各 crate 的 `README.md`。
 
 ## 许可证
 
-Apache License 2.0，见 [`LICENSE`](LICENSE) 与 [`NOTICE`](NOTICE)。允许他人合法地以此核心
-构建商业实现；本仓库不附加任何“禁止竞争”之类的额外限制。“AI 通行证 / AI Pass” 为暂定名称，
-名称与域名尚未核实（占位域名 `aipass.example`），许可证不授予商标使用权。
+Apache License 2.0，见 [LICENSE](LICENSE) 与 [NOTICE](NOTICE)。允许商业使用；许可证不授予商标使用权。
 
-安全问题请按 [`SECURITY.md`](SECURITY.md) 私下报告；贡献方式见 [`CONTRIBUTING.md`](CONTRIBUTING.md)。
-
----
-
-## English summary
-
-The open-source core of **AI Pass** (working name): vault crypto and storage formats, the
-access broker, executor and connectors, MCP bridge, SDKs, reference CLI and a basic
-self-host node, plus the cross-platform desktop app (`desktop/`, Tauri 2 + React) — licensed
-**Apache-2.0**. The mobile apps, the browser extension, the official cloud services and console,
-team features and maintained integrations are commercial and *not* part of this directory.
-
-- **Status:** under development, **not independently audited**.
-- **Crates:** see the table above (`aipass-types`, `aipass-crypto`, `aipass-vault`,
-  `aipass-storage`, `aipass-sync`, `aipass-sync-server`, `aipass-broker`, `aipass-executor`,
-  `aipass-client`, `aipass-mcp`, `aipass-hostconfig`, `aipass-node`, `aipass-cli`,
-  `aipass-ffi`). Interfaces are specified in `docs/spec/CONTRACTS.md`.
-- **Desktop app:** `desktop/` — Tauri 2 + React for macOS / Windows / Linux with an embedded
-  broker + executor (protection level *compatible*), the AI-host wizard and the browser
-  native-messaging host `aipass-nm-host`. `desktop/src-tauri` is a separate Cargo workspace
-  (own `Cargo.lock`, excluded from `Cargo.toml` here) that depends on `crates/*` by path; see
-  [`desktop/README.md`](desktop/README.md).
-- **Test vectors:** `test-vectors/` (request signing, JCS, approval digest, HPKE,
-  XChaCha20-Poly1305) — every implementation must reproduce them.
-- **Build:** `cargo check --workspace`; tests per crate with `cargo test -p <crate>`.
-- **Security reports:** see `SECURITY.md`. **Contributing:** see `CONTRIBUTING.md` (DCO).
+安全问题请按 [SECURITY.md](SECURITY.md) 私下报告；贡献方式见 [CONTRIBUTING.md](CONTRIBUTING.md)。

@@ -8,13 +8,10 @@ The open-source desktop client of AI Pass. It lives in `desktop/` of the open-so
 一套代码同时面向 macOS、Windows、Linux（Tauri 2：Rust 核心 + React/TypeScript 界面）。
 One cross-platform codebase (Tauri 2: Rust core + React/TypeScript UI) for macOS, Windows and Linux.
 
-> 本产品尚未经过独立安全审计。 / This product has not yet been independently security audited.
-
 ## 界面预览 / Screenshots
 
-使用独立演示账号库，密码保持隐藏；本次编译的前端连接真实 Rust 核心，在浏览器中采集。
-完整图集与采集说明见[仓库 README](../README.md#桌面-app-截图--desktop-screenshots)和[截图说明](../docs/screenshots/README.md)。
-The screenshots use the compiled frontend connected to the real Rust core with fictional data, captured in a browser.
+截图使用演示账号与资源，更多界面见[仓库 README](../README.md#桌面-app)。
+Screenshots use demo accounts and resources. See the [repository README](../README.en.md#desktop-app) for more views.
 
 ![账号库 / Vault](../docs/screenshots/02-vault.jpg)
 
@@ -113,7 +110,7 @@ pnpm tauri dev                                     # run (UI dev server on 127.0
 pnpm tauri build --debug --bundles app             # macOS .app bundle (debug)
 ```
 
-Other platforms (not runnable in this environment):
+Platform packages (run on the target platform):
 
 ```sh
 pnpm tauri build --bundles msi,nsis                # on Windows
@@ -123,50 +120,18 @@ pnpm tauri build --bundles deb,appimage,rpm        # on Linux
 Environment: `AIPASS_HOME` (default `~/.aipass`), `AIPASS_CLOUD_URL`, `AIPASS_LOG`, `AIPASS_MCP_PATH` /
 `AIPASS_NM_HOST_PATH` (override the sidecar locations, e.g. for development).
 
-### What was built and tested here (macOS arm64)
+### Tests
 
-- `pnpm typecheck`, `pnpm test` (13 vitest tests: §5.3 field order, narrowing never widens, storage
-  validation, grouping, exception detection, i18n completeness + honesty rules, flattened account-detail
-  rendering and edit/save regression), `pnpm build`.
-- `cargo test --workspace` in `src-tauri`: unit tests (framing, envelopes, IPC paths/tokens, secret store
-  lock cycle, licence verification, manifest shape) and `tests/desktop_core.rs`:
-  vault lifecycle + re-auth gating + generated-password handles + lock/unlock + reopen;
-  native-messaging rules (exact origin, no https entry on http, frame-origin re-check, user gesture,
-  generate limits, save, LOCKED, rate limit); IPC (0600 socket and token, wrong token / non-extension
-  origin / allow-list → NOT_PAIRED, then the real `aipass-nm-host` binary driven with Chrome framing,
-  and LOCKED when the app is gone); approval flow through the embedded broker with the **real executor**
-  (resource with secret-bearing config refused, approval event without secrets, approve → grant →
-  credential installed in the executor via the HPKE envelope, end-sessions revoke wipes it, signed deny,
-  approving while locked refused, audit chain valid).
-- `tests/relay_phone_approval.rs`: phone-style approval over a **real relay** (in-process
-  `aipass-sync-server` relay router on loopback): broker → sealed `approval.request` → approver mailbox →
-  device fetches, approves with its vault → `approval.decision` → desktop relay consumer → broker →
-  grant + credential installed in the executor. Also checks that the embedded executor is enrolled as a
-  vault member (role executor).
-- `tests/mcp_bridge.rs`: the **real `aipass-mcp` binary** against the embedded broker on its Unix socket
-  (default discovery `unix://<AIPASS_HOME>/run/broker.sock`, socket 0600): `pair --host codex` → code
-  compared and approved through `AppCore::approve_connection` → `stdio` → `resources_list` →
-  `operations_request` (`postgres.query_view` on a real temp PostgreSQL, sslmode disable on loopback) →
-  `approval_required` → `AppCore::approve` → `operations_status` `succeeded` with the view's rows only →
-  grant revoked at end-sessions (credential and PostgreSQL sessions gone, a new request needs a new
-  approval) → `revoke_all` + `remove` → the bridge is refused. No output carries the DB password.
-- `tests/phone_approval.rs`: a **separate phone vault device** (`aipass_sync::VaultClient`, the code the
-  FFI calls) over a real relay, in both pairing directions (phone joins the desktop's vault via
-  `pair_scan`/`pair_confirm`; desktop joins the phone's vault via `join_begin`). The phone knows the
-  desktop's executor only from the synced vault member record (role executor), receives the sealed
-  `approval.request`, approves with `approve_with_entry` and the broker installs the credential. Also: a
-  device revoked in the vault stops being a broker approver (`reconcile_approvers`) and its grants end.
-- `tests/tunnel_handler.rs`: cloud tunnel frames — `connection.create` gives a pending connection with a
-  6-digit code; MCP frames are refused until approved, then `initialize` is served; local (non-remote)
-  connections and revoked ones are refused.
-- `cargo clippy --workspace --all-targets`: clean.
-- `pnpm tauri build --debug --bundles app` succeeded: `src-tauri/target/debug/bundle/macos/AI 通行证.app`
-  (contains `aipass-desktop`, `aipass-mcp`, `aipass-nm-host`). A smoke launch of the bundled app created
-  `run/desktop.sock` + `run/desktop.token` (0600) and the bundled `aipass-nm-host` got a valid `hello`
-  reply. A follow-up local run on 2026-11-01 built and launched the macOS app again, passed all
-  13 frontend tests, and clicked through the compiled frontend against the real Rust `AppCore` in a browser
-  (accounts, AI-host detection, executor resources and audit-chain verification). Native-window automation
-  timed out in this environment; the screenshots and capture method are documented above. Not code-signed / notarized.
+Run frontend checks with `pnpm typecheck && pnpm test && pnpm build`, and Rust tests with
+`cargo test --workspace` from `src-tauri/`.
+
+| Test | Coverage |
+| --- | --- |
+| `tests/desktop_core.rs` | Vault lifecycle, re-authentication, native messaging, IPC, approvals and revocation |
+| `tests/relay_phone_approval.rs` | Encrypted relay messages, phone approval and executor enrollment |
+| `tests/mcp_bridge.rs` | MCP pairing, PostgreSQL requests, approval and session revocation |
+| `tests/phone_approval.rs` | Device pairing in both directions, phone approvals and device revocation |
+| `tests/tunnel_handler.rs` | Remote connections, pending approvals and MCP tunnel handling |
 
 ### Windows / Linux notes
 
@@ -183,11 +148,9 @@ Environment: `AIPASS_HOME` (default `~/.aipass`), `AIPASS_CLOUD_URL`, `AIPASS_LO
 
 ## Limitations
 
-- Not independently security audited.
 - Recovery verification can race with background sync: an older sync snapshot can overwrite
-  `recovery_verified_at`, causing the recovery reminder to reappear. This was observed while preparing the
-  screenshot vault; serializing the verification and sync state updates needs a separate fix across clients.
-  恢复材料验证状态可能被并发的后台同步覆盖，界面会再次提示“恢复材料未验证”；本次截图保留了实际提醒。
+  `recovery_verified_at`, causing the recovery reminder to reappear.
+  恢复材料验证状态可能被并发的后台同步覆盖，界面会再次提示“恢复材料未验证”。
 - Phone approvals need a relay URL in 设置 (official cloud relay or a self-hosted node) and a relay that
   accepts the executor's `exe_…` signature (the official / self-host relay resolves it from the vault
   member record the desktop writes when it enrols its executor). Tested against an in-process relay with a

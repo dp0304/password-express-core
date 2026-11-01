@@ -140,7 +140,7 @@ authorization header leaks), `http_transport` (sessions, version header, Origin/
 * No server-initiated SSE stream (`GET /mcp` → 405), no resumability, no MCP tasks, no
   elicitation (by design: secrets are never collected through MCP).
 * Host compatibility is "standard protocol" only — no host has passed the full acceptance run in
-  this build. Not independently audited.
+  this build.
 
 ## Contract deviations
 

@@ -3,12 +3,9 @@
 
 ## 当前状态 / Status
 
-**AI 通行证（AI Pass）开源核心尚未经过独立的第三方安全审计。** 开源不等于已审计；审计报告
-将按实际完成情况发布。在审计完成前，请把本软件视为预发布质量。
+项目处于预发布阶段，尚未完成独立安全审计。
 
-**The AI Pass open-source core has not yet been independently audited.** Open source is not
-the same as audited; audit reports will be published only once an audit has actually been
-completed.
+The project is in pre-release and has not completed an independent security audit.
 
 ## 报告漏洞 / Reporting a vulnerability
 

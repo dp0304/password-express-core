@@ -5,19 +5,17 @@
 
 > Spend less time managing passwords. Let AI use accounts within the access you approve.
 
-**AI Pass** is a working name for a password and API-key manager that lets AI agents use
-accounts within user-approved scopes without receiving raw credentials through its tools.
-This repository contains the **open-source core**, licensed under Apache-2.0.
-
-**Status: under development; not independently security audited.** Do not treat any part of
-this repository as an audited security product. Data formats and interfaces may change before
-1.0; changes will include migration notes and test vectors.
+AI Pass manages passwords, API keys, and database credentials. AI agents use accounts and
+services through an access broker; tool output contains no raw credentials.
 
 The open-source scope includes the cryptography and storage core, access broker, executor and
 connectors, MCP bridge, SDKs, reference CLI, basic self-hosted services, and the cross-platform
 desktop app (`desktop/`). The commercial mobile apps, browser extension, official cloud
 services and console, team features, and officially maintained integrations are outside this
-repository. This repository is the open-source core of the product.
+repository. The core and desktop app are licensed under Apache-2.0.
+
+The project is under development. Data formats and interfaces may change before 1.0.
+See [SECURITY.md](SECURITY.md) for security information.
 
 ## Architecture
 
@@ -35,10 +33,6 @@ does not provide operating-system isolation from other code running as that user
 Alternatively, `aipass-node` provides the broker, executor, ciphertext sync, relay, and
 remote MCP as a self-hosted node, with approvals handled by paired trusted clients.
 
-The diagram shows logical data paths. HPKE credential envelopes reach the executor through
-the broker; filtered results return to the requesting connection through the broker and
-MCP bridge or SDK.
-
 ## How it works
 
 ![AI operation workflow: request checks, grant reuse or trusted approval, credential sealing, scoped execution, and output filtering](docs/diagrams/authorization-workflow.en.png)
@@ -52,42 +46,32 @@ MCP bridge or SDK.
    and limits. A desktop decision requires fresh verification of the unlock password. The
    client signs the decision and seals the credential; the broker verifies the signature
    and request digest before creating a grant. Denied or expired requests do not execute.
-4. **Execute and return the result.** The executor temporarily holds credentials for the
-   grant and invokes the connector. Field allowlists and secret detection filter results
-   before they reach the requesting connection, and state changes are audited. Expiry or
-   revocation blocks subsequent use; session termination and upstream revocation are
-   reported according to what the executor can actually do.
+4. **Execute and return the result.** The executor calls the service within the grant's
+   scope, filters results with field allowlists and secret detection, and records an audit
+   log. Expired or revoked grants block further calls.
 
-The diagrams were generated with imagegen and checked against the current component
-relationships and control flow. [Diagram notes, source references, and full prompts](docs/diagrams/README.md)
-are stored in the repository.
+See the [executor documentation](crates/aipass-executor/README.md) for session termination
+and upstream revocation support.
 
-## Desktop screenshots
+## Desktop app
 
-These screenshots show the compiled desktop frontend connected to the real local Rust
-`AppCore`, captured in a browser. The vault, accounts, and resources are fictional demo data;
-passwords remain masked. The screenshot UI is in **Simplified Chinese**. The native desktop
-app enables screen-capture protection by default. See the [capture notes](docs/screenshots/README.md)
-for the environment and method.
+Available for macOS, Windows, and Linux. Screenshots use demo accounts and resources.
 
 ### Vault
 
-Group logins, API keys, database credentials, and secure notes by project, then view account
-details with masked passwords.
+Group logins, API keys, database credentials, and secure notes by project.
 
 ![Vault: demo project accounts and an account detail panel with a masked password](docs/screenshots/02-vault.jpg)
 
 ### AI connections
 
-Detect local AI tools and see their standard-protocol integration options and user or
-project configuration scopes.
+Detect local AI tools and configure access for a user or project.
 
 ![AI connections: detected Codex, Claude Code, Cursor, and other AI hosts](docs/screenshots/03-ai-connections.jpg)
 
 ### Executors
 
-Inspect the local executor's status and protection level, together with registered HTTP API
-and PostgreSQL demo resources.
+View executor status, protection levels, and registered service resources.
 
 ![Executor: compatible local execution and test-environment resources](docs/screenshots/04-executors.jpg)
 
@@ -97,18 +81,14 @@ Review vault, sync, and local executor status, plus reminders that need attentio
 
 ![Overview: vault and executor status with a recovery-material reminder](docs/screenshots/01-overview.jpg)
 
-Known desktop limitations, including a recovery-verification state race with background
-sync that can cause the reminder to reappear, are documented in
-[`desktop/README.md`](desktop/README.md#limitations).
-
 ## What's included
 
 | Directory | Contents |
 | --- | --- |
 | `crates/` | Rust workspace with 14 crates, listed below |
-| `sdk/typescript/`, `sdk/python/` | `@aipass/sdk` and `aipass-sdk`, built by their respective build steps |
+| `sdk/typescript/`, `sdk/python/` | TypeScript SDK `@aipass/sdk` and Python SDK `aipass-sdk` |
 | `deploy/` | Docker, systemd, and self-hosting examples |
-| `desktop/` | Cross-platform desktop app for macOS, Windows, and Linux, built with Tauri 2 and React. Includes an embedded broker and executor at the compatible protection level, an AI-host setup wizard, and the `aipass-nm-host` browser native-messaging host. `desktop/src-tauri` is a separate Cargo workspace with its own `Cargo.lock`, excluded from the root workspace, and depends on `crates/*` by relative path. See [`desktop/README.md`](desktop/README.md). |
+| `desktop/` | Tauri 2 + React app with an embedded broker, executor, AI setup wizard, and browser native-messaging host. See the [desktop documentation](desktop/README.md) for build instructions. |
 | `test-vectors/` | Cross-language vectors for request signatures, JCS, approval digests, HPKE, and XChaCha20-Poly1305 |
 
 ### Crates
@@ -125,7 +105,7 @@ sync that can cause the reminder to reappear, are documented in
 | `aipass-executor` | Executor and connectors (`postgres`, `github`, `http_api`), outbound request protection, and output filtering |
 | `aipass-client` | Signed Rust client for the broker API over Unix domain sockets or TCP |
 | `aipass-mcp` | MCP bridge over stdio and Streamable HTTP; `aipass-mcp` binary |
-| `aipass-hostconfig` | AI-host configuration wizard for Codex, Claude Code, Cursor, and others, labeled as supporting standard-protocol integration |
+| `aipass-hostconfig` | AI-host configuration wizard for Codex, Claude Code, Cursor, and others using standard protocols |
 | `aipass-node` | Self-hosted node; `aipass-node` binary combining the broker, executor, sync, relay, and remote MCP |
 | `aipass-cli` | Reference CLI and trusted client; `aipass` binary |
 | `aipass-ffi` | UniFFI bindings for iOS and Android: Swift module `AIPassCore` and Kotlin package `com.aipass.core` |
@@ -201,7 +181,7 @@ TLS uses rustls with the **aws-lc-rs** cryptographic provider throughout the wor
 Do not enable the `ring` provider in any crate: compiling both providers makes
 `rustls::ClientConfig::builder()` panic at runtime.
 
-## Workspace dependency notes
+## Dependencies
 
 `[workspace.dependencies]` uses mutually compatible versions current as of October 2026,
 including the newer RustCrypto / dalek generation: `sha2 0.11`, `hmac 0.13`, `hkdf 0.13`,
@@ -212,7 +192,7 @@ Other workspace dependencies include `tokio 1.54`, `axum 0.8.9`, `tower-http 0.7
 `reqwest 0.13` (rustls, no OpenSSL), `rusqlite 0.39` (bundled), `tokio-postgres 0.7.18`,
 `sqlx 0.9`, and `uniffi 0.32`. Prefer `dep.workspace = true` when adding dependencies.
 
-### Contract deviations
+### Version constraints
 
 - `sqlx` enables `tls-rustls-aws-lc-rs` instead of `tls-rustls`, which selects the `ring`
   provider in sqlx 0.9. This keeps the workspace on one rustls cryptographic provider
@@ -220,18 +200,12 @@ Other workspace dependencies include `tokio 1.54`, `axum 0.8.9`, `tower-http 0.7
 - `rusqlite` is pinned to 0.39 rather than 0.41. Version 0.39 depends on
   `libsqlite3-sys 0.37`, the version line that can coexist with `sqlx 0.9`, which requires
   `libsqlite3-sys < 0.38`. The `links = "sqlite3"` constraint permits only one copy.
-  Dependency resolution and compilation were checked with a temporary crate depending
-  on all 72 workspace dependencies.
 - Additional crate-specific notes are documented in each crate's `README.md`.
 
 ## License
 
-Apache License 2.0; see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE). Others may build
-commercial implementations on this core under the license. This repository adds no
-restriction against competition.
-
-“AI 通行证 / AI Pass” is a working name. The name and domain have not been verified;
-`aipass.example` is a placeholder. The license does not grant trademark rights.
+Apache License 2.0; see [LICENSE](LICENSE) and [NOTICE](NOTICE). Commercial use is allowed.
+The license does not grant trademark rights.
 
 Report security issues privately as described in [`SECURITY.md`](SECURITY.md).
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for contribution guidelines and DCO sign-off.
